@@ -1,0 +1,5 @@
+<div class="radio-buttons">
+    <button type="button" *ngFor="let child of children; index as i" class="btn btn-sm" [ngClass]="{'active': child.value == selected }" (click)="selectedChange.emit(child.value)">
+        {{ child.title }}
+    </button>
+</div>

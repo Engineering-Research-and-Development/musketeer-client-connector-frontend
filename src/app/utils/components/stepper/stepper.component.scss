@@ -1,0 +1,55 @@
+@import 'src/assets/styles/variables.scss';
+
+.stepper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .step {
+        flex-basis: 0;
+        flex-grow: 1;
+        max-width: 100%;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+
+        &.active {
+            cursor: default;
+            color: $nebular-warning-lighter;
+
+            .step-index {
+                box-shadow: inset 0 0 0 5px $nebular-warning-lighter;
+                color: $nebular-warning-lighter;
+            }
+        }
+
+        &.disabled {
+            cursor: default;
+            color: rgba(white, .8);
+
+            .step-index {
+                background-color: rgba(white, .8);
+                color: rgba(black, .8);
+            }
+        }
+
+        .step-index {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            background-color: white;
+            color: black;
+            font-weight: bold;
+            margin: .3rem auto;
+            padding: .5rem;
+
+            .complete {
+                position: absolute;
+                bottom: -10px;
+                right: -15px;
+            }
+        }
+    }
+}

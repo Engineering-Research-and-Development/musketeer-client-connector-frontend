@@ -1,0 +1,13 @@
+.table {
+    &.task-general {
+        th, td {
+            padding: .3em;
+        }
+    }
+
+    &.task-advanced {
+        th, td {
+            padding: .35em .75rem;
+        }
+    }
+}

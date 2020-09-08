@@ -1,0 +1,29 @@
+.text-loader {
+    border-width: 2px;
+}
+
+.tabs {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: rgb(70, 70, 70);
+    // border-radius: .25rem;
+    padding: 1.5rem 1rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: border .3s ease-in-out;
+}
+
+.tabs:hover:not(.active) {
+    color: lightskyblue;
+}
+
+.tabs.active {
+    color: #31a5ee;
+    border-left: 5px solid #31a5ee;
+}
+
+.database.selected {
+    background-image: linear-gradient(to right, #ea5858, #6e466e);
+    font-weight: bold;
+    color: white !important;
+}

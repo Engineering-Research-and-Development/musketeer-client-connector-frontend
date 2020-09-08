@@ -1,0 +1,46 @@
+<form #form="ngForm" [ngClass]="{'was-validated': form.submitted }" (submit)="form.valid && submitCommsConfig($event)">
+    <div class="form-group">
+        <label for="gitUrl">Git Url</label>
+        <input type="text" id="gitUrl" name="gitUrl" class="form-control" placeholder="git URL" [(ngModel)]="commsConfig.comms_git_url" required>
+        <small id="gitUrlHelp" class="form-text text-muted">
+            A <i>git pip install</i> compliant URL, e.g. <b>git+https://github.com/IBM/pycloudmessenger.git@master</b> (or, with credentials, <b>git+https://user:password@github.com/example.git@master</b>)
+        </small>
+    </div>
+
+    <div class="custom-control custom-checkbox mb-2">
+        <input type="checkbox" name="hasCommsCredentials" class="custom-control-input" [(ngModel)]="credentials" id="hasCommsCredentials">
+        <label class="custom-control-label" for="hasCommsCredentials">Has credentials</label>
+    </div>
+
+    <div class="form-row" *ngIf="credentials">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="gitUser">Git user</label>
+                <input type="text" id="gitUser" name="gitUser" class="form-control" placeholder="Git user"
+                    [(ngModel)]="commsConfig.comms_git_user" required>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="gitPassword">Git Password</label>
+                <input type="password" id="gitPassword" name="gitPassword" class="form-control" placeholder="Git Password"
+                    [(ngModel)]="commsConfig.comms_git_password" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="module">Module</label>
+        <input type="text" id="module" name="module" class="form-control" placeholder="Module main class" [(ngModel)]="commsConfig.comms_module" required>
+        <small id="moduleHelp" class="form-text text-muted">
+            The communications module main class, e.g. <b>example.module</b>.
+        </small>
+    </div>
+
+    <app-file-upload [label]="'Communications Configuration File'" [inputId]="'commsConfigFile'" (fileContent)="commsConfig.comms_config = $event"></app-file-upload>
+
+    <div class="row mt-4 mx-0 justify-content-end">
+        <button class="btn btn-sm btn-success">Confirm</button>
+    </div>
+</form>

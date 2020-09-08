@@ -1,0 +1,10 @@
+<div class="stepper">
+    <div class="step" *ngFor="let step of steps; index as i" [ngClass]="{'active': selected == i, 'disabled': i > progress}" (click)="selectStep(i)">
+        <div class="step-index">
+            <span>{{ i + 1 }}</span>
+
+            <i class="fa fa-check fa-2x text-success complete" *ngIf="progress > i"></i>
+        </div>
+        <h6>{{ step }}</h6>
+    </div>
+</div>

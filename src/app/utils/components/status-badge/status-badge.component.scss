@@ -1,0 +1,25 @@
+.status-badge {
+    display: inline-block;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    // vertical-align: middle;
+    padding: .2rem .6em;
+    border-radius: 10rem;
+    color: white;
+
+    &.started {
+        background-color: #ffc107;
+    }
+    &.complete {
+        background-color: #28a745;
+    }
+    &.created {
+        background-color: #8f9bb3;
+    }
+    &.failed {
+        background-color: #dc3545;
+    }
+}

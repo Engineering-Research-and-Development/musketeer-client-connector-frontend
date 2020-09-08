@@ -1,0 +1,5 @@
+<!-- <span class="badge badge-pill badge-warning text-white" *ngIf="task.status == 'STARTED'">{{ task.status }}</span>
+<span class="badge badge-pill badge-success" *ngIf="task.status == 'COMPLETE'">{{ task.status }}</span>
+<span class="badge badge-pill badge-light border" *ngIf="task.status == 'CREATED'">{{ task.status }}</span>
+<span class="badge badge-pill badge-danger" *ngIf="task.status == 'FAILED'">{{ task.status }}</span> -->
+<span class="status-badge {{ status.toLowerCase() }}">{{ status }}</span>

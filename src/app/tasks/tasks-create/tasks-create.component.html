@@ -1,0 +1,232 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/tasks">Tasks</a></li>
+        <li class="breadcrumb-item active" aria-current="page">New Task</li>
+    </ol>
+</nav>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fa fa-plus fa-lg mr-2"></i>
+        <b>New Task</b>
+    </div>
+
+    <form #form="ngForm" class="needs-validation" (submit)="form.valid && create()"
+        [ngClass]="{'was-validated': form.submitted}">
+        <div class="card-body">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Name</span>
+                </div>
+
+                <input type="text" id="name" name="name" [(ngModel)]="newTask.task_name" #name="ngModel"
+                    class="form-control" placeholder="Task name" required>
+            </div>
+
+            <alert class="w-100" type="danger"
+                *ngIf="(name.invalid && (name.dirty || name.touched)) || form.submitted && name.errors">
+                Name is required.
+            </alert>
+
+            <div class="input-group mt-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Description</span>
+                </div>
+                <textarea class="form-control" placeholder="Task description (optional)" id="taskDescription"
+                    name="taskDescription" [(ngModel)]="newTask.definition.task_description" rows="3"></textarea>
+            </div>
+
+            <h6 class="text-muted mt-3">General Settings</h6>
+
+            <div class="form-row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Privacy</span>
+                        </div>
+
+                        <select class="form-control" name="privacy" [ngModel]="newTask.definition.POM"
+                            (ngModelChange)="updatePrivacy($event)">
+                            <option *ngFor="let level of privacyLevels; index as i" [value]="level.privacy">
+                                {{ level.label }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <ng-container *ngIf="privacyLevel">
+                <alert type="task-info">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <b class="d-block">
+                                <i class="fa fa-info-circle"></i>
+                                {{ privacyLevel.label }} - {{ privacyLevel.name }}
+                            </b>
+                            <span [style.font-size.rem]=".9">{{ privacyLevel.description }}</span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <table class="table table-borderless specs">
+                                <tbody>
+                                    <tr *ngFor="let spec of privacyLevel.specs | keys">
+                                        <ng-container *ngIf="spec != 'server' && spec != 'client'">
+                                            <th role="col">{{ spec }}</th>
+                                            <td>
+                                                <app-rating [value]="privacyLevel.specs[spec]" [max]="5"></app-rating>
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </alert>
+            </ng-container>
+
+            <div class="form-row my-2 align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Algorithm</span>
+                        </div>
+
+                        <select class="form-control" name="algorithm" [ngModel]="selectedAlg"
+                            (ngModelChange)="updateAlgorithm($event)" #algorithm="ngModel" required>
+                            <option value="undefined" hidden selected disabled>Select one algorithm</option>
+                            <optgroup label="Clustering">
+                                <ng-container *ngFor="let algorithm of pomAlgorithms; index as i">
+                                    <option *ngIf="algorithm.type == 'clustering'" [value]="algorithm.id">
+                                        {{ algorithm.label }}
+                                    </option>
+                                </ng-container>
+                            </optgroup>
+
+                            <optgroup label="Classification">
+                                <ng-container *ngFor="let algorithm of pomAlgorithms; index as i">
+                                    <option *ngIf="algorithm.type == 'classification'" [value]="algorithm.id">
+                                        {{ algorithm.label }}
+                                    </option>
+                                </ng-container>
+                            </optgroup>
+
+                            <optgroup label="Regression">
+                                <ng-container *ngFor="let algorithm of pomAlgorithms; index as i">
+                                    <option *ngIf="algorithm.type == 'regression'" [value]="algorithm.id">
+                                        {{ algorithm.label }}
+                                    </option>
+                                </ng-container>
+                            </optgroup>
+                        </select>
+
+                    </div>
+
+                    <alert type="danger"
+                        *ngIf="(algorithm.invalid && (algorithm.dirty || algorithm.touched)) || form.submitted && algorithm.errors">
+                        Algorithm is required.
+                    </alert>
+                </div>
+
+                <div class="col">
+                    <i class="fa fa-question-circle fa-lg text-info" *ngIf="algModel"
+                        [tooltip]="algModel ? algModel.description : null" placement="right"></i>
+                </div>
+            </div>
+
+            <div class="form-row mb-3" *ngIf="algModel">
+                <div class="col">
+                    <div class="bg-light rounded border px-3 py-2">
+                        <h6 class="text-muted">Algorithm properties</h6>
+                        <div class="form-row">
+                            <div class="col-6" *ngFor="let property of algModel.properties; index as i">
+                                <div class="form-group mb-2" *ngIf="property.type != 'json'; else file">
+                                    <label class="mb-1" for="prop-{{i}}">{{ property.label }}</label>
+                                    <input id="prop-{{i}}" class="form-control" [type]="property.type"
+                                        [name]="property.name" [placeholder]="property.defaultValue"
+                                        [(ngModel)]="property.value">
+                                    <small id="propHelp-{{i}}"
+                                        class="form-text text-muted">{{ property.description }}</small>
+                                </div>
+
+                                <ng-template #file>
+                                    <app-file-upload [label]="property.label" [inputId]="property.name + 'file'"
+                                        (fileContent)="property.value = $event">
+                                    </app-file-upload>
+                                    <small id="propHelp-{{i}}"
+                                        class="form-text mt-0 text-muted">{{ property.description }}</small>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row mt-2">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Quorum</span>
+                        </div>
+
+                        <input type="number" name="quorum" class="form-control" min="1"
+                            [(ngModel)]="newTask.definition.quorum" #quorum="ngModel" required>
+                    </div>
+                    <alert type="danger"
+                        *ngIf="(quorum.invalid && (quorum.dirty || quorum.touched)) || form.submitted && quorum.errors">
+                        Quorum is required.
+                    </alert>
+                    <small id="quorumHelp" class="form-text text-muted">Minimum number of participants required to start
+                        a task.</small>
+                </div>
+            </div>
+
+            <h6 class="text-muted mt-3">Input Data Description</h6>
+
+            <div class="mb-2">
+                <app-file-upload [label]="'Data description File'" [inputId]="'dataDescriptionFile'" [required]="false">
+                </app-file-upload>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-6 mb-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Features</span>
+                        </div>
+
+                        <input type="number" name="features" placeholder="Input data fatures" class="form-control"
+                            [(ngModel)]="newTask.definition.data_description.features" #features="ngModel" required>
+                    </div>
+                    <alert type="danger"
+                        *ngIf="(features.invalid && (features.dirty || features.touched)) || form.submitted && features.errors">
+                        Features field is required.
+                    </alert>
+                    <small id="featuresHelp" class="form-text text-muted">Number of features.</small>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Labels</span>
+                        </div>
+
+                        <input type="number" placeholder="Input data labels" name="labels" class="form-control"
+                            [(ngModel)]="newTask.definition.data_description.labels" #labels="ngModel" required>
+                    </div>
+                    <alert type="danger"
+                        *ngIf="(labels.invalid && (labels.dirty || labels.touched)) || form.submitted && labels.errors">
+                        Labels field is required.
+                    </alert>
+                    <small id="labelsHelp" class="form-text text-muted">Number of labels.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <div class="row mx-0 justify-content-end">
+                <button class="btn btn-light border mr-2" type="button" routerLink="/tasks">Cancel</button>
+                <button class="btn btn-success" type="submit">Create</button>
+            </div>
+        </div>
+    </form>
+</div>

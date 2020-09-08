@@ -1,0 +1,8 @@
+@import 'src/assets/styles/variables.scss';
+
+a.dropdown-item {
+    cursor: pointer;
+}
+a.dropdown-item:active {
+    background-color: #eee;
+}

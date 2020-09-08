@@ -1,0 +1,88 @@
+<h6 class="text-muted">General Information</h6>
+
+<table class="table table-borderless task-general">
+    <tbody>
+        <tr *ngIf="task.definition.task_description">
+            <td style="width: 50%;">
+                <h6 class="d-inline mb-0">Description</h6>
+            </td>
+            <td>
+                <span>{{ task.definition.task_description }}</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 50%;">
+                <h6 class="d-inline mb-0">Algorithm</h6>
+            </td>
+            <td>
+                <span>{{ task.definition.algorithm_name || 'Not specified' }}</span>
+                <span class="text-muted"> ({{ task.definition.algorithm_type }})</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 50%;">
+                <h6 class="d-inline mb-0">Status</h6>
+            </td>
+            <td>
+                <app-status-badge [status]="task.status"></app-status-badge>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 50%;">
+                <h6 class="d-inline mb-0">Topology</h6>
+            </td>
+            <td>{{ task.topology }}</td>
+        </tr>
+        <tr>
+            <td style="width: 50%;">
+                <h6 class="d-inline mb-0">Quorum</h6>
+            </td>
+            <td>{{ task.definition.quorum }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ng-container *ngIf="task.definition.data_description">
+    <h6 class="text-muted">Data Description</h6>
+    
+    <table class="table table-borderless task-general">
+        <tbody>
+            <tr>
+                <td style="width: 50%;">
+                    <h6 class="d-inline mb-0">Features</h6>
+                </td>
+                <td>{{ task.definition.data_description.features }}</td>
+            </tr>
+            <tr>
+                <td style="width: 50%;">
+                    <h6 class="d-inline mb-0">Labels</h6>
+                </td>
+                <td>{{ task.definition.data_description.labels }}</td>
+            </tr>
+        </tbody>
+    </table>
+</ng-container>
+
+
+<accordion [isAnimated]="true">
+    <accordion-group>
+        <div accordion-heading>
+            <h6 class="text-muted mb-0">Advanced Information</h6>
+        </div>
+        <table class="table table-borderless task-advanced mb-0">
+            <tbody>
+                <ng-container *ngFor="let prop of task.definition | keys">
+                    <tr class="border-bottom"
+                        *ngIf="prop != 'POM' && prop != 'algorithm_name' && prop != 'algorithm_type'
+                            && prop != 'data_description' && prop != 'model_architecture' && prop != 'quorum'
+                            && prop != 'task_description' && prop != 'owner'">
+                        <td>
+                            <h6 class="d-inline mb-0">{{ prop }}</h6>
+                        </td>
+                        <td class="text-center">{{ task.definition[prop] }}</td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </accordion-group>
+</accordion>

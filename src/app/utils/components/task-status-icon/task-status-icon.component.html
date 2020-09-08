@@ -1,0 +1,6 @@
+<ng-container [ngSwitch]="status">
+    <div class="spinner-grow training text-warning mr-2" *ngSwitchCase="'STARTED'" tooltip="Started"></div>
+    <i class="fa fa-check-circle text-success mr-2" *ngSwitchCase="'COMPLETE'" tooltip="Complete"></i>
+    <fa-icon [icon]="faStopwatch" class="open-task mr-2" *ngSwitchCase="'CREATED'" tooltip="Open"></fa-icon>
+    <i class="fa fa-times-circle text-danger mr-2" *ngSwitchCase="'FAILED'" tooltip="Failed"></i>
+</ng-container>

@@ -1,0 +1,82 @@
+<ngx-spinner bdColor="rgba(0,0,0,0.7)" size="large" color="#fff" type="ball-clip-rotate">
+</ngx-spinner>
+
+<div class="gradient-container">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 px-0">
+                <div class="tabs">
+                    <div class="tab rounded-top" (click)="toggleRegistration()">
+                        {{ register ?  'Login' : 'Register' }}</div>
+                </div>
+            </div>
+            <div class="card shadow-lg login-card">
+                <div class="card-header">
+                    <h3 class="text-center text-gradient">{{ register ?  'Create your profile on' : 'Login to access' }}</h3>
+                </div>
+
+                <div class="card-body text-center">
+                    <img class="w-50 mt-3 mb-4" [src]="imageUrl">
+
+                    <form #form="ngForm" [ngClass]="{'was-validated': form.submitted }" (submit)="form.valid && confirm()">
+                        <div class="form-group">
+                            <label for="user">User</label>
+                            <input type="text" name="user" id="user" class="form-control" [(ngModel)]="user.user"
+                                #inputName="ngModel" placeholder="User" required>
+
+                            <alert class="w-100" type="danger"
+                                *ngIf="(inputName.invalid && (inputName.dirty || inputName.touched)) || form.submitted && inputName.errors">
+                                User is required.
+                            </alert>
+                        </div>
+
+                        <div class="form-group" *ngIf="register" @loginSwapAnimation>
+                            <label for="user">Organization</label>
+                            <input type="text" name="organization" id="organization" class="form-control"
+                                [(ngModel)]="user.org" #inputOrg="ngModel" placeholder="Organization" required>
+
+                            <alert class="w-100" type="danger"
+                                *ngIf="(inputOrg.invalid && (inputOrg.dirty || inputOrg.touched)) || form.submitted && inputOrg.errors">
+                                Organization is required.
+                            </alert>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" class="form-control"
+                                [(ngModel)]="user.password" #inputPassword="ngModel" placeholder="Password" required>
+
+                            <alert class="w-100" type="danger"
+                                *ngIf="(inputPassword.invalid && (inputPassword.dirty || inputPassword.touched)) || form.submitted && inputPassword.errors">
+                                Password is required.
+                            </alert>
+                        </div>
+
+                        <div class="form-group" *ngIf="register" @loginSwapAnimation>
+                            <label for="confirm-password">Confirm Password</label>
+                            <input type="password" name="confirm-password" id="confirm-password" class="form-control"
+                                [(ngModel)]="confirmPassword" #confirmPass="ngModel" placeholder="Password" required>
+
+                            <alert class="w-100" type="danger"
+                                *ngIf="(confirmPass.invalid && (confirmPass.dirty || confirmPass.touched)) || form.submitted && confirmPass.errors">
+                                Confirm your password first.
+                            </alert>
+
+                            <alert class="w-100" type="danger" *ngIf="confirmErr">
+                                Passwords must be equal.
+                            </alert>
+                        </div>
+
+                        <div class="row mx-0 pt-2 justify-content-end">
+                            <button class="btn"
+                                [ngClass]="register ? 'btn-success' : 'btn-primary'">{{ register ? 'Register' : 'Login'}}</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

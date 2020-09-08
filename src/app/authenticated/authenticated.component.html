@@ -1,0 +1,50 @@
+<ngx-spinner
+  bdColor = "rgba(0,0,0,0.7)"
+  size = "large"
+  color = "#fff"
+  type = "ball-clip-rotate">
+</ngx-spinner>
+
+<nav class="navbar navbar-dark bg-light shadow-sm mb-3">
+    <a class="navbar-brand" routerLink="/">
+      <img [src]="logoUrl" width="100">
+    </a>
+  
+    <div class="ml-auto d-flex">
+      <ul class="navbar-nav mr-3">
+        <li class="nav-item" [ngClass]="{'active font-weight-bold': router.url == '/worker/datasets'}">
+          <a class="nav-link" routerLink="/worker/datasets">Datasets</a>
+        </li>
+      </ul>
+      <div class="btn-group" dropdown>
+        <button id="button-basic" dropdownToggle type="button" class="btn btn-outline-light dropdown-toggle"
+                aria-controls="dropdown-basic">
+          <i class="fa fa-user mr-2"></i>
+          {{ user.user }}
+        </button>
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+            role="menu" aria-labelledby="button-basic">
+          <!-- <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
+          <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
+          <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
+          <li class="divider dropdown-divider"></li> -->
+          <li role="menuitem">
+            <a class="dropdown-item" routerLink="/settings/edit-configurations">
+              <i class="fa fa-cogs mr-2"></i>
+              Edit Configurations
+            </a>
+          </li>
+          <li role="menuitem">
+            <a class="dropdown-item" (click)="logout()">
+              <i class="fa fa-sign-out mr-2"></i>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>

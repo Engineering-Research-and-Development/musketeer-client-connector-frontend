@@ -1,0 +1,17 @@
+@import 'src/assets/styles/variables';
+
+.dataset-item {
+    small {
+        color: #6c757d;
+    }
+    
+    &.selected {
+        background-color: $info-white-blue;
+        border-color: $info-almost-white-blue;
+        color: $info-blue;
+    
+        small {
+            color: $info-light-blue;
+        }
+    }
+}

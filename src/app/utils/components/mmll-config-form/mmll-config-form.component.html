@@ -1,0 +1,79 @@
+<form #mmllForm="ngForm" [ngClass]="{'was-validated': mmllForm.submitted }" (submit)="mmllForm.valid && submitMMLLConfig($event)">
+    <div class="form-group">
+        <label for="mmllGitUrl">Git Url</label>
+        <input type="text" id="mmllGitUrl" name="gitUrl" class="form-control" placeholder="git URL"
+            [(ngModel)]="mmllConfig.mmll_git_url" required>
+        <small id="gitUrlHelp" class="form-text text-muted">
+            A <i>git pip install</i> compliant URL, e.g. <b>git+https://github.com/example.git@master</b>.
+        </small>
+    </div>
+
+    <div class="custom-control custom-checkbox mb-2">
+        <input type="checkbox" name="hasMMLLCredentials" class="custom-control-input" [(ngModel)]="credentials" id="hasMMLLCredentials">
+        <label class="custom-control-label" for="hasMMLLCredentials">Has credentials</label>
+    </div>
+
+    <div class="form-row" *ngIf="credentials">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="gitUser">Git user</label>
+                <input type="text" id="gitUser" name="gitUser" class="form-control" placeholder="Git user"
+                    [(ngModel)]="mmllConfig.mmll_git_user" required>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="gitPassword">Git Password</label>
+                <input type="password" id="gitPassword" name="gitPassword" class="form-control" placeholder="Git Password"
+                    [(ngModel)]="mmllConfig.mmll_git_password" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="masterNode">Aggregator Classpath</label>
+        <input type="text" id="masterNode" name="masterNode" class="form-control" placeholder="Aggregator classpath"
+            [(ngModel)]="mmllConfig.mmll_masternode_classpath" required>
+        <small id="masterNodeHelp" class="form-text text-muted">
+            Dot notation for Aggregator class module, e.g. <b>example.module.AggregatorModule</b>
+        </small>
+    </div>
+
+    <div class="form-group">
+        <label for="workerNode">Participant Classpath</label>
+        <input type="text" id="workerNode" name="workerNode" class="form-control" placeholder="Participant classpath"
+            [(ngModel)]="mmllConfig.mmll_workernode_classpath" required>
+        <small id="workerNodeHelp" class="form-text text-muted">
+            Dot notation for Participant class module, e.g. <b>example.module.ParticipantModule</b>
+        </small>
+    </div>
+
+    <div class="form-group">
+        <label for="masterWrapper">Aggregator Wrapper Classpath</label>
+        <input type="text" id="masterWrapper" name="masterWrapper" class="form-control"
+            placeholder="Aggregator wrapper classpath"
+            [(ngModel)]="mmllConfig.mmll_comms_master_wrapper_classpath" required>
+        <small id="masterWrapperHelp" class="form-text text-muted">
+            The Aggregator wrapper class, e.g. <b>example.module.CommsAggregator</b>
+        </small>
+    </div>
+
+    <div class="form-group">
+        <label for="workerWrapper">Participant Wrapper Classpath</label>
+        <input type="text" id="workerWrapper" name="workerWrapper" class="form-control"
+            placeholder="Participant wrapper classpath"
+            [(ngModel)]="mmllConfig.mmll_comms_worker_wrapper_classpath" required>
+        <small id="workerWrapperHelp" class="form-text text-muted">
+            The Participant wrapper class, e.g. <b>example.module.CommsParticipant</b>
+        </small>
+    </div>
+
+    <div class="form-group">
+        <app-file-upload [label]="'Catalogue File'" (fileContent)="mmllConfig.mmll_algorithms = $event"></app-file-upload>
+    </div>
+
+    <div class="row mt-4 mx-0 justify-content-end">
+        <button class="btn btn-sm btn-success">Confirm</button>
+    </div>
+</form>

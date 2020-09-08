@@ -1,0 +1,10 @@
+<span *ngIf="mode == 'stars'">
+    <i *ngFor="let star of stars" class="fa"
+        [ngClass]="star.fill ? 'fa-star text-warning' : 'fa-star-o text-muted'"></i>
+</span>
+
+
+<span *ngIf="mode == 'circles'">
+    <i *ngFor="let star of stars" class="fa"
+        [ngClass]="star.fill ? 'fa-circle' : 'fa-circle-o'"></i>
+</span>

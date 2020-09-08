@@ -1,0 +1,17 @@
+<label for="{{ inputId }}">{{ label }}</label>
+<div class="custom-file" *ngIf="!file">
+    <input type="file" class="custom-file-input" id="{{ inputId }}" accept=".json" name="{{ inputId }}"
+        (change)="handleFileInput($event)" [required]="required">
+    <label class="custom-file-label mb-0" for="{{ inputId }}">Choose {{ label.toLowerCase() }}</label>
+</div>
+
+<div class="file-badge" *ngIf="file">
+    <div class="file-info">
+        <b>{{ file.name }}</b>
+        <span class="text-muted">{{ file.size | bytes: 2 }}</span>
+    </div>
+
+    <button type="button" class="btn bg-transparent shadow-none" (click)="file = null; fileContent.emit(null)">
+        <i class="fa fa-times"></i>
+    </button>
+</div>

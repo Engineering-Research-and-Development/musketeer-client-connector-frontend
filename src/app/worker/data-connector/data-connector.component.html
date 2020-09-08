@@ -1,0 +1,67 @@
+<h5>Datasets</h5>
+
+<br>
+
+<div class="row">
+    <div class="col-md-6">
+        <h6>Datasets List</h6>
+        <ul class="list-group" *ngIf="datasets; else loading">
+            <app-dataset-item *ngFor="let dataset of datasets"
+                                [dataset]="dataset" [readOnly]="true"></app-dataset-item>
+        </ul>
+    </div>
+
+    <div class="col-md-6">
+        <h6>Add dataset</h6>
+        <form #form="ngForm" [ngClass]="{'was-validated': form.submitted }" (submit)="form.valid && submitDataset()">
+            <div class="mb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            Name
+                        </span>
+                    </div>
+    
+                    <input type="text" id="datasetName" name="datasetName" class="form-control" placeholder="Dataset name"
+                        [(ngModel)]="newDataset.name" required>
+                </div>
+                <small id="datasetNameHelp" class="text-muted">
+                    Choose your new dataset name.
+                </small>
+            </div>
+
+            <div class="mb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa fa-archive"></i>
+                        </span>
+                    </div>
+    
+                    <input type="text" id="datasetPath" name="datasetPath" class="form-control" placeholder="Dataset file"
+                        [(ngModel)]="newDataset.path" required>
+                </div>
+                <small id="datasetPathHelp" class="text-muted">
+                    The complete name and extension of the dataset file, e.g. <b>"input_data/exampleFile.csv"</b>.
+                </small>
+            </div>
+        
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" name="hasHeader" class="custom-control-input" [(ngModel)]="newDataset.header"
+                    id="customCheck1">
+                <label class="custom-control-label" for="customCheck1">Has header</label>
+            </div>
+        
+            <div class="row mt-4 mx-0 justify-content-end">
+                <button class="btn btn-sm btn-success">Confirm</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<ng-template #loading>
+    <div class="text-center my-5">
+        <app-loader></app-loader>
+    </div>
+</ng-template>

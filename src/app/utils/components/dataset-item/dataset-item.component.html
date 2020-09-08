@@ -1,0 +1,19 @@
+<li class="list-group-item dataset-item"
+    [ngClass]="{'list-group-item-action action': !readOnly, 'selected': selected }" (click)="datasetSelected.emit(dataset)">
+    <div class="row">
+        <ng-container *ngIf="!readOnly">
+            <div class="col-1" *ngIf="selected">
+                <i class="fa fa-lg fa-check text-success"></i>
+            </div>
+        </ng-container>
+
+        <div class="col text-truncate">
+            <h6 class="mb-0">{{ dataset.name }}</h6>
+            <small [tooltip]="dataset.path" container="body">{{ dataset.path }}</small>
+        </div>
+        <div class="col-4 text-right">
+            <h6 class="mb-0">{{ dataset.dimension | bytes: 2 }}</h6>
+            <small>{{ dataset.added | date:'dd MMMM yyyy HH:mm' }}</small>
+        </div>
+    </div>
+</li>
