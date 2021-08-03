@@ -1,0 +1,19 @@
+.training {
+    height: 16px;
+    width: 16px;
+}
+
+.open-task {
+    animation: blink-animation 2s ease-in-out infinite;
+}
+
+@keyframes blink-animation {
+    50% {
+        opacity: 0.3;
+    }
+}
+@-webkit-keyframes blink-animation {
+    50% {
+        opacity: 0.3;
+    }
+}

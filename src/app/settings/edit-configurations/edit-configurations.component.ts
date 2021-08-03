@@ -55,11 +55,13 @@ export class EditConfigurationsComponent implements OnInit {
 
   submitCommsConfig(config: CommsConfiguration) {
     this.downloading = true;
-    this.commsConfig = config;
 
-    this.configurationsService.setCommsConfiguration(this.commsConfig)
+    this.configurationsService.setCommsConfiguration(config)
       .subscribe({
-        next: () => this.downloading = false,
+        next: () => {
+          this.downloading = false;
+          this.commsConfig = config;
+        },
         error: (err: HttpErrorResponse) => {
           this.downloading = false;
           this.toaster.error(err.error.message || 'Could not submit configuration.');
@@ -69,11 +71,13 @@ export class EditConfigurationsComponent implements OnInit {
 
   submitMMLLConfig(config: MMLLConfiguration) {
     this.downloading = true;
-    this.mmllConfig = config;
 
-    this.configurationsService.setMMLLConfiguration(this.mmllConfig)
+    this.configurationsService.setMMLLConfiguration(config)
       .subscribe({
-        next: () => this.downloading = false,
+        next: () => {
+          this.downloading = false;
+          this.mmllConfig = config;
+        },
         error: (err: HttpErrorResponse) => {
           this.downloading = false;
           this.toaster.error(err.error.message || 'Could not submit configuration.');

@@ -10,17 +10,21 @@ export class Datasets {
 }
 
 export class DataFile {
+    _id: string;
     name: string;
     path: string;
     dimension?: number;
     added?: string;
-    format: string;
-    header: boolean;
+    format: 'csv' | 'pkl';
+    header?: boolean;
+    label?: boolean;
 
     constructor() {
         this.name = '';
         this.path = '';
         this.format = 'csv';
+        this.header = false;
+        this.label = false;
     }
 }
 

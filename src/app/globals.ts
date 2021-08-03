@@ -26,6 +26,8 @@ export class Globals {
   readonly REGISTER_URL = `${this.COMMS_URL}/registration`;
 
   readonly TASKS_URL = `${this.COMMS_URL}/tasks`;
+
+  readonly MODELS_URL = `${this.COMMS_URL}/models`;
   
   readonly FML_URL = `${this.BASE_URL}/fml`;
 

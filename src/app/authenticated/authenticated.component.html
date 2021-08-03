@@ -1,50 +1,53 @@
-<ngx-spinner
-  bdColor = "rgba(0,0,0,0.7)"
-  size = "large"
-  color = "#fff"
-  type = "ball-clip-rotate">
+<ngx-spinner bdColor="rgba(0,0,0,0.7)" size="large" color="#fff" type="ball-clip-rotate">
 </ngx-spinner>
 
-<nav class="navbar navbar-dark bg-light shadow-sm mb-3">
-    <a class="navbar-brand" routerLink="/">
-      <img [src]="logoUrl" width="100">
-    </a>
-  
-    <div class="ml-auto d-flex">
-      <ul class="navbar-nav mr-3">
-        <li class="nav-item" [ngClass]="{'active font-weight-bold': router.url == '/worker/datasets'}">
-          <a class="nav-link" routerLink="/worker/datasets">Datasets</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-light shadow-sm mb-3">
+  <a class="navbar-brand" routerLink="/">
+    <img [src]="logoUrl" width="100">
+  </a>
+  <button class="navbar-toggler ml-auto" type="button" (click)="isCollapsed = !isCollapsed" aria-controls="navbarCollapse" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="navbar-collapse" [collapse]="isCollapsed" [isAnimated]="true" id="navbarCollapse">
+    <ul class="ml-auto navbar-nav mr-lg-3">
+      <li class="nav-item text-right" [ngClass]="{'active font-weight-bold': router.url == '/models'}">
+        <a class="nav-link" routerLink="/models">Models</a>
+      </li>
+      <li class="nav-item text-right" [ngClass]="{'active font-weight-bold': router.url == '/datasets'}">
+        <a class="nav-link" routerLink="/datasets">Datasets</a>
+      </li>
+    </ul>
+    <div class="btn-group" dropdown>
+      <button id="button-basic" dropdownToggle type="button" class="btn btn-outline-light dropdown-toggle"
+        aria-controls="dropdown-basic">
+        <i class="fa fa-user mr-2"></i>
+        {{ user.user }}
+      </button>
+      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu"
+        aria-labelledby="button-basic">
+        <li role="menuitem">
+          <a class="dropdown-item" routerLink="/settings/profile">
+            <fa-icon [icon]="faUserCog" [fixedWidth]="true"></fa-icon>
+            <span class="ml-2">Profile</span>
+          </a>
+        </li>
+        <li role="menuitem">
+          <a class="dropdown-item" routerLink="/settings/edit-configurations">
+            <i class="fa fa-fw fa-cogs"></i>
+            <span class="ml-2">Edit Configurations</span>
+          </a>
+        </li>
+        <li role="menuitem">
+          <a class="dropdown-item" (click)="logout()">
+            <i class="fa fa-fw fa-sign-out"></i>
+            <span class="ml-2">Logout</span>
+          </a>
         </li>
       </ul>
-      <div class="btn-group" dropdown>
-        <button id="button-basic" dropdownToggle type="button" class="btn btn-outline-light dropdown-toggle"
-                aria-controls="dropdown-basic">
-          <i class="fa fa-user mr-2"></i>
-          {{ user.user }}
-        </button>
-        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right"
-            role="menu" aria-labelledby="button-basic">
-          <!-- <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
-          <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
-          <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
-          <li class="divider dropdown-divider"></li> -->
-          <li role="menuitem">
-            <a class="dropdown-item" routerLink="/settings/edit-configurations">
-              <i class="fa fa-cogs mr-2"></i>
-              Edit Configurations
-            </a>
-          </li>
-          <li role="menuitem">
-            <a class="dropdown-item" (click)="logout()">
-              <i class="fa fa-sign-out mr-2"></i>
-              Logout
-            </a>
-          </li>
-        </ul>
-      </div>
     </div>
-  </nav>
-  
-  <div class="container">
-    <router-outlet></router-outlet>
   </div>
+</nav>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

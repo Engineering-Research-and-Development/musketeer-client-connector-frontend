@@ -1,0 +1,52 @@
+@import "../../../../assets/styles/variables";
+
+.custom-tabs-header {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+
+    .custom-tab-label {
+        position: relative;
+        padding: 0.75rem 1rem;
+        opacity: 0.75;
+        min-width: 100px;
+        text-align: center;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: color 0.25s ease;
+
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 7px;
+            border-radius: 5px;
+            transition: all 0.25s ease;
+        }
+
+        &:hover,
+        &.active {
+            opacity: 1;
+            color: $musketeer-light-red;
+        }
+
+        &:hover::after {
+            background-color: $musketeer-light-red;
+        }
+
+        &.active {
+            font-weight: 600;
+            color: $musketeer-dark-red;
+
+            &::after {
+                background-color: $musketeer-dark-red;
+            }
+        }
+    }
+}
+
+.custom-tab-pane {
+    padding: 1rem;
+}

@@ -13,6 +13,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
 import { NgDragDropModule } from 'ng-drag-drop';
 import { TaskDetailComponent } from '../tasks/task-detail/task-detail.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [ TasksListComponent, TasksCreateComponent, TaskDetailComponent ],
@@ -22,6 +23,7 @@ import { TaskDetailComponent } from '../tasks/task-detail/task-detail.component'
     FormsModule,
     FontAwesomeModule,
     UtilsModule,
+    DragDropModule,
     AccordionModule.forRoot(),
     PaginationModule.forRoot(),
     NgDragDropModule.forRoot(),
@@ -29,7 +31,7 @@ import { TaskDetailComponent } from '../tasks/task-detail/task-detail.component'
     AlertModule.forRoot(),
     TooltipModule.forRoot(),
     AccordionModule.forRoot(),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
   ],
   exports: [ TasksListComponent, TasksCreateComponent ]
 })

@@ -1,0 +1,31 @@
+<div class="form-row">
+    <div [class]="fullWidth ? 'col-12' : 'col-6'" *ngFor="let property of properties; index as i">
+        <div class="form-group mb-2" *ngIf="property.type != 'json'; else file">
+            <ng-container *ngIf="property.type == 'combo'">
+                <label class="mb-1" for="{{propInputId}}-{{i}}">{{ property.label }}</label>
+                <select class="form-control" [(ngModel)]="property.value">
+                    <option value="undefined" hidden disabled>Choose option value</option>
+                    <option [value]="option" *ngFor="let option of property.options">{{ option }}</option>
+                </select>
+                <small id="{{propHelpId}}-{{i}}" class="form-text text-muted">{{ property.description
+                }}</small>
+            </ng-container>
+
+            <ng-container *ngIf="property.type != 'combo'">
+                <label class="mb-1" for="{{propInputId}}-{{i}}">{{ property.label }}</label>
+                <input id="{{propInputId}}-{{i}}" class="form-control" [type]="property.type" [name]="property.name"
+                    [placeholder]="property.defaultValue" [(ngModel)]="property.value">
+                <small id="{{propHelpId}}-{{i}}" class="form-text text-muted">{{ property.description
+                    }}</small>
+            </ng-container>
+        </div>
+
+        <ng-template #file>
+            <app-file-upload [label]="property.label" [inputId]="property.name + 'file'"
+                (fileContent)="property.value = $event">
+            </app-file-upload>
+            <small id="{{propHelpId}}-{{i}}" class="form-text mt-0 text-muted">{{ property.description
+                }}</small>
+        </ng-template>
+    </div>
+</div>

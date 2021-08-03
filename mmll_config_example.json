@@ -1,6 +1,0 @@
-{
-    "mmll_git_url": "git+https://musketeer-eng-team:Allagrandissima99@github.com/Musketeer-H2020/MMLL.git",
-    "mmll_masternode_classpath": "MMLL.nodes.MasterNode.MasterNode",
-    "mmll_workernode_classpath": "MMLL.nodes.WorkerNode.WorkerNode",
-    "mmll_comms_wrapper_classpath": "MMLL.comms.comms_pycloudmessenger.Comms_master"
-}

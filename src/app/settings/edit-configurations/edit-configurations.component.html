@@ -1,3 +1,15 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a routerLink="/tasks">
+                <i class="fa fa-home"></i>
+                <span class="ml-1">Home</span>
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Configurations</li>
+    </ol>
+</nav>
+
 <h5>Edit configurations</h5>
 
 <ng-container *ngIf="!downloading; else loading">
@@ -6,28 +18,30 @@
             <div accordion-heading>
                 <i class="fa fa-comments-o mr-2"></i>
                 <h6 class="d-inline-block mb-0">Communications</h6>
-    
-                <button *ngIf="commsConfig?.comms_config" class="btn btn-sm shadow-none bg-transparent pull-right" tooltip="Configuration File"
-                    (click)="commsSettings($event)">
+
+                <button *ngIf="commsConfig?.comms_config" class="btn btn-sm shadow-none bg-transparent pull-right"
+                    tooltip="Configuration File" (click)="commsSettings($event)">
                     <i class="fa fa-eye"></i>
                 </button>
             </div>
-    
-            <app-comms-config-form [commsConfig]="commsConfig" (submitted)="submitCommsConfig($event)"></app-comms-config-form>
+
+            <app-comms-config-form [commsConfig]="commsConfig" (submitted)="submitCommsConfig($event)">
+            </app-comms-config-form>
         </accordion-group>
-    
+
         <accordion-group *ngIf="mmllConfig" class="mb-2">
             <div accordion-heading>
                 <i class="fa fa-graduation-cap mr-2"></i>
                 <h6 class="d-inline-block mb-0">ML Library</h6>
-    
-                <button *ngIf="mmllConfig?.mmll_algorithms" class="btn btn-sm shadow-none bg-transparent pull-right" tooltip="Catalogue File"
-                    (click)="catalogueSettings($event)">
+
+                <button *ngIf="mmllConfig?.mmll_algorithms" class="btn btn-sm shadow-none bg-transparent pull-right"
+                    tooltip="Catalogue File" (click)="catalogueSettings($event)">
                     <i class="fa fa-eye"></i>
                 </button>
             </div>
-    
-            <app-mmll-config-form [mmllConfig]="mmllConfig" (submitted)="submitMMLLConfig($event)"></app-mmll-config-form>
+
+            <app-mmll-config-form [mmllConfig]="mmllConfig" (submitted)="submitMMLLConfig($event)">
+            </app-mmll-config-form>
         </accordion-group>
     </accordion>
 </ng-container>
@@ -56,7 +70,8 @@
     </div>
 </div>
 
-<div bsModal #catalogueModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="catalogue-dialog-child-name">
+<div bsModal #catalogueModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="catalogue-dialog-child-name">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

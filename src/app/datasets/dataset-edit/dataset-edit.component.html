@@ -1,0 +1,63 @@
+<form #form="ngForm" [ngClass]="{'was-validated': form.submitted }"
+    (submit)="form.valid && submitDataset.emit(newDataset)">
+    <div class="mb-2">
+        <div class="form-group">
+            <label for="datasetName">Name</label>
+            <input type="text" id="datasetName" name="datasetName" class="form-control" placeholder="Dataset name"
+                [(ngModel)]="newDataset.name" required>
+            <small id="datasetNameHelp" class="text-muted">
+                Choose your new dataset name.
+            </small>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-lg-8">
+            <div class="form-group">
+                <label for="datasetPath">Path</label>
+                <input type="text" id="datasetPath" name="datasetPath" class="form-control" placeholder="Dataset file"
+                    [(ngModel)]="newDataset.path" required>
+                <small id="datasetPathHelp" class="text-muted">
+                    Name and extension of the dataset file, e.g. <b>"exampleFile.csv"</b>.
+                </small>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label for="datasetFormat">Format</label>
+                <select id="datasetFormat" name="datasetFormat" class="form-control" [(ngModel)]="newDataset.format"
+                    required>
+                    <option>csv</option>
+                    <option>pkl</option>
+                </select>
+                <small id="datasetPathHelp" class="text-muted">
+                    Dataset file format, <b>"csv"</b> or <b>"pkl"</b>.
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="custom-control custom-checkbox" *ngIf="newDataset.format == 'csv'">
+        <input type="checkbox" name="hasHeader" class="custom-control-input" [(ngModel)]="newDataset.header"
+            id="customCheck1">
+        <label class="custom-control-label" for="customCheck1">Has Header</label>
+        <small id="hasHeaderHelp" class="mt-0 form-text text-muted">
+            Dataset first row is treated as table head.
+        </small>
+    </div>
+
+    <div class="custom-control custom-checkbox" *ngIf="newDataset.format == 'pkl'">
+        <input type="checkbox" name="hasLabel" class="custom-control-input" [(ngModel)]="newDataset.label"
+            id="customCheck2">
+        <label class="custom-control-label" for="customCheck2">Has Labels</label>
+        <small id="hasLabelHelp" class="mt-0 form-text text-muted">
+            Dataset can be fed to supervised algorithms.
+        </small>
+    </div>
+
+    <div class="d-flex mt-4 justify-content-end">
+        <button class="btn btn-sm btn-light border" type="button" (click)="cancel.emit()">Cancel</button>
+        <button class="btn btn-sm btn-success ml-3">Confirm</button>
+    </div>
+</form>

@@ -1,0 +1,140 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a routerLink="/tasks">
+                <i class="fa fa-home"></i>
+                <span class="ml-1">Home</span>
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Models</li>
+    </ol>
+</nav>
+
+<div class="mt-3">
+    <div class="mb-3">
+        <h5>Models List</h5>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                </span>
+            </div>
+            <input class="form-control" type="text" [(ngModel)]="search" placeholder="Search model...">
+        </div>
+    </div>
+
+    <ul class="models-list" *ngIf="models; else loading">
+
+        <alert type="info m-2" *ngIf="models.length == 0">
+            <i class="fa fa-info-circle"></i>
+            <span class="ml-2">No models found!</span>
+        </alert>
+
+        <div class="model-item" *ngFor="let model of models | filterBy:[search, 'task_name']">
+            <div class="col pl-0">
+                <h6 class="mb-0">{{ model.task_name }}</h6>
+                <small class="text-muted">{{ model.added | date:'EEEE d MMMM yyyy HH:mm:ss'}}</small>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-sm btn-light border text-info" tooltip="Lineage"
+                    (click)="openModelLineage(model)">
+                    <i class="fa fa-info-circle"></i>
+                </button>
+                <button class="btn btn-sm btn-light border text-success" tooltip="Download"
+                    (click)="openDownloadModal(model)">
+                    <i class="fa fa-download"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" tooltip="Delete" (click)="deleteModal(model)">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </ul>
+</div>
+
+<br>
+
+<ng-template #loading>
+    <div class="text-center my-5">
+        <app-loader></app-loader>
+    </div>
+</ng-template>
+
+<div bsModal #downloadModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" *ngIf="model">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left">Download {{ model.task_name }}</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="downloadModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-goup">
+                    <label for="download-extension">Download extension</label>
+                    <select id="download-extension" class="form-control" [(ngModel)]="downloadExtension">
+                        <option>pmml</option>
+                        <option>pkl</option>
+                        <option>onnx</option>
+                    </select>
+                    <small id="download-extension-help">Choose the extension in which you wish to store the ML Model.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light border" (click)="downloadModal.hide()">Cancel</button>
+                <button class="btn btn-success ml-3" (click)="downloadModel()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #modelLineageModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" *ngIf="model">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left">{{ model.task_name }} Lineage</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modelLineageModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ng-container *ngIf="modelLineage; else loading">
+                    <pre class="json-visualizer" *ngIf="!modelLineage.error">{{ modelLineage | json }}</pre>
+
+                    <alert type="danger" *ngIf="modelLineage.error">
+                        <i class="fa fa-exclamation-circle"></i>
+                        <span class="ml-2">{{ modelLineage.message }}</span>
+                    </alert>
+                </ng-container>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-light border" (click)="modelLineageModal.hide()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #modelDeleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left">Delete Model</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modelDeleteModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center" *ngIf="model">
+                Are you sure you want to delete model created by task <b>{{ model.task_name }}</b>?
+
+                <h5 class="text-danger mt-2 mb-4">Remember, this operation cannot be undone.</h5>
+
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-sm btn-light border" (click)="modelDeleteModal.hide()">Cancel</button>
+                    <button class="btn btn-sm btn-danger ml-3" (click)="deleteModel()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

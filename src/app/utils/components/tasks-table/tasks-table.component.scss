@@ -1,0 +1,36 @@
+.table-wrapper {
+    // padding-top: 100px;
+    overflow-y: auto;
+    max-height: 65vh;
+    min-height: 80px;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+
+    .tasks-table {
+        width: 100%;
+
+        thead {
+            text-transform: uppercase;
+
+            th {
+                color: #495057;
+                background-color: #e9ecef;
+                position: sticky;
+                top: 0;
+                z-index: 1;
+                font-weight: 600;
+                font-size: 0.95rem;
+            }
+        }
+
+        tr:not(:last-of-type) {
+            border-bottom: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 0.5rem;
+            vertical-align: middle;
+        }
+    }
+}

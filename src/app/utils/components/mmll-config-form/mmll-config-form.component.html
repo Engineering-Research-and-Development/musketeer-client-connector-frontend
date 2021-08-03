@@ -13,22 +13,14 @@
         <label class="custom-control-label" for="hasMMLLCredentials">Has credentials</label>
     </div>
 
-    <div class="form-row" *ngIf="credentials">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="gitUser">Git user</label>
-                <input type="text" id="gitUser" name="gitUser" class="form-control" placeholder="Git user"
-                    [(ngModel)]="mmllConfig.mmll_git_user" required>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="gitPassword">Git Password</label>
-                <input type="password" id="gitPassword" name="gitPassword" class="form-control" placeholder="Git Password"
-                    [(ngModel)]="mmllConfig.mmll_git_password" required>
-            </div>
-        </div>
+    <div class="form-group" *ngIf="credentials">
+        <label for="gitToken">Git token</label>
+        <input type="text" id="gitToken" name="gitToken" class="form-control" placeholder="Git token"
+            [(ngModel)]="mmllConfig.mmll_git_token" required>
+        <small id="moduleHelpToken" class="form-text text-muted">
+            Personal access tokens (PATs) are an alternative to using passwords for authentication to GitHub
+            (<a target="_blank" href="https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token">Creating a personal access token</a>).
+        </small>
     </div>
 
     <div class="form-group">

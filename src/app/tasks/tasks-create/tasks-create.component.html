@@ -1,6 +1,11 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/tasks">Tasks</a></li>
+        <li class="breadcrumb-item">
+            <a routerLink="/tasks">
+                <i class="fa fa-home"></i>
+                <span class="ml-1">Home</span>
+            </a>
+        </li>
         <li class="breadcrumb-item active" aria-current="page">New Task</li>
     </ol>
 </nav>
@@ -19,7 +24,7 @@
                     <span class="input-group-text">Name</span>
                 </div>
 
-                <input type="text" id="name" name="name" [(ngModel)]="newTask.task_name" #name="ngModel"
+                <input type="text" id="name" name="task-name" [(ngModel)]="newTask.task_name" #name="ngModel"
                     class="form-control" placeholder="Task name" required>
             </div>
 
@@ -33,7 +38,7 @@
                     <span class="input-group-text">Description</span>
                 </div>
                 <textarea class="form-control" placeholder="Task description (optional)" id="taskDescription"
-                    name="taskDescription" [(ngModel)]="newTask.definition.task_description" rows="3"></textarea>
+                    name="task-description" [(ngModel)]="newTask.definition.task_description" rows="3"></textarea>
             </div>
 
             <h6 class="text-muted mt-3">General Settings</h6>
@@ -45,11 +50,24 @@
                             <span class="input-group-text">Privacy</span>
                         </div>
 
-                        <select class="form-control" name="privacy" [ngModel]="newTask.definition.POM"
+                        <select class="form-control" name="task-privacy" [ngModel]="newTask.definition.POM"
                             (ngModelChange)="updatePrivacy($event)">
                             <option *ngFor="let level of privacyLevels; index as i" [value]="level.privacy">
                                 {{ level.label }}
                             </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Topology</span>
+                        </div>
+
+                        <select class="form-control" name="task-privacy" [ngModel]="newTask.topology">
+                            <option>STAR</option>
+                            <option>RING</option>
                         </select>
                     </div>
                 </div>
@@ -63,7 +81,7 @@
                                 <i class="fa fa-info-circle"></i>
                                 {{ privacyLevel.label }} - {{ privacyLevel.name }}
                             </b>
-                            <span [style.font-size.rem]=".9">{{ privacyLevel.description }}</span>
+                            <span style="font-size: 0.85rem">{{ privacyLevel.description }}</span>
                         </div>
 
                         <div class="col-md-6">
@@ -91,9 +109,9 @@
                             <span class="input-group-text">Algorithm</span>
                         </div>
 
-                        <select class="form-control" name="algorithm" [ngModel]="selectedAlg"
-                            (ngModelChange)="updateAlgorithm($event)" #algorithm="ngModel" required>
-                            <option value="undefined" hidden selected disabled>Select one algorithm</option>
+                        <select class="form-control" name="task-algorithm" [ngModel]="selectedAlg"
+                            (ngModelChange)="updateAlgorithm($event)" #algorithmSelect="ngModel" required>
+                            <option [value]="undefined" hidden selected disabled>Select one algorithm</option>
                             <optgroup label="Clustering">
                                 <ng-container *ngFor="let algorithm of pomAlgorithms; index as i">
                                     <option *ngIf="algorithm.type == 'clustering'" [value]="algorithm.id">
@@ -122,7 +140,7 @@
                     </div>
 
                     <alert type="danger"
-                        *ngIf="(algorithm.invalid && (algorithm.dirty || algorithm.touched)) || form.submitted && algorithm.errors">
+                        *ngIf="(algorithmSelect.invalid && (algorithmSelect.dirty || algorithmSelect.touched)) || form.submitted && algorithmSelect.errors">
                         Algorithm is required.
                     </alert>
                 </div>
@@ -137,26 +155,7 @@
                 <div class="col">
                     <div class="bg-light rounded border px-3 py-2">
                         <h6 class="text-muted">Algorithm properties</h6>
-                        <div class="form-row">
-                            <div class="col-6" *ngFor="let property of algModel.properties; index as i">
-                                <div class="form-group mb-2" *ngIf="property.type != 'json'; else file">
-                                    <label class="mb-1" for="prop-{{i}}">{{ property.label }}</label>
-                                    <input id="prop-{{i}}" class="form-control" [type]="property.type"
-                                        [name]="property.name" [placeholder]="property.defaultValue"
-                                        [(ngModel)]="property.value">
-                                    <small id="propHelp-{{i}}"
-                                        class="form-text text-muted">{{ property.description }}</small>
-                                </div>
-
-                                <ng-template #file>
-                                    <app-file-upload [label]="property.label" [inputId]="property.name + 'file'"
-                                        (fileContent)="property.value = $event">
-                                    </app-file-upload>
-                                    <small id="propHelp-{{i}}"
-                                        class="form-text mt-0 text-muted">{{ property.description }}</small>
-                                </ng-template>
-                            </div>
-                        </div>
+                        <app-properties-editor [properties]="algModel.properties"></app-properties-editor>
                     </div>
                 </div>
             </div>
@@ -168,7 +167,7 @@
                             <span class="input-group-text">Quorum</span>
                         </div>
 
-                        <input type="number" name="quorum" class="form-control" min="1"
+                        <input type="number" name="task-quorum" class="form-control" min="1"
                             [(ngModel)]="newTask.definition.quorum" #quorum="ngModel" required>
                     </div>
                     <alert type="danger"
@@ -180,22 +179,88 @@
                 </div>
             </div>
 
-            <h6 class="text-muted mt-3">Input Data Description</h6>
+            <br>
 
-            <div class="mb-2">
-                <app-file-upload [label]="'Data description File'" [inputId]="'dataDescriptionFile'" [required]="false">
-                </app-file-upload>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" name="task-preprocessing" id="task-preprocessing" class="custom-control-input"
+                    [(ngModel)]="showPreprocessing">
+                <label class="custom-control-label" for="task-preprocessing">Preprocessing</label>
+                <small id="preprocessing-help" class="mt-0 text-muted form-text">
+                    Select one or more algorithms to prepare data before processing.
+                </small>
             </div>
 
+            <ng-container *ngIf="showPreprocessing">
+                <div class="row mt-3" cdkDropListGroup>
+                    <div class="col-6">
+                        <div class="preprocessing-algos-list" cdkDropList [cdkDropListSortingDisabled]="true"
+                            [cdkDropListData]="preprocessingAlgos">
+                            <div class="algorithm-item" cdkDrag *ngFor="let algo of preprocessingAlgos">
+                                <h6 class="mb-0">{{ algo.label }}</h6>
+                                <small class="text-muted">{{ algo.description }}</small>
+
+                                <div class="pipeline-item" *cdkDragPreview>{{ algo.label }}</div>
+                                <div class="algorithm-item pipeline-item" *cdkDragPlaceholder>{{ algo.label }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="preprocessing-pipeline" cdkDropList
+                            [cdkDropListData]="newTask.definition.preprocessing" (cdkDropListDropped)="drop($event)">
+                            <div class="pipeline-item" cdkDrag
+                                *ngFor="let algo of newTask.definition.preprocessing; index as i">
+                                <div class="col p-0 overflow-hidden">
+                                    <div class="pipeline-step">{{ i + 1 }}</div>
+                                    <div class="d-inline algorithm-label">{{ algo.label }}</div>
+                                </div>
+
+                                <div>
+                                    <button type="button" *ngIf="algo.properties" (click)="openAlgModal(algo)"
+                                        class="icon-button ml-auto">
+                                        <i class="fa fa-cog"></i>
+                                    </button>
+
+                                    <button type="button" (click)="newTask.definition.preprocessing.splice(i, 1)"
+                                        class="icon-button">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="pipeline-item empty">Drop algorithm here.</div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <br>
+
+            <h6 class="text-muted">Data Description</h6>
+
             <div class="form-row">
+                <div class="col-md-6 mb-2">
+                    <app-file-upload label="Input Data description File" inputId="inputDataDescriptionFile"
+                        [required]="false" (fileContent)="newTask.definition.input_data_description = $event">
+                    </app-file-upload>
+                </div>
+
+                <div class="col-md-6 mb-2">
+                    <app-file-upload label="Target Data description File" inputId="targetDataDescriptionFile"
+                        [required]="false" (fileContent)="newTask.definition.target_data_description = $event"
+                        *ngIf="isSupervised">
+                    </app-file-upload>
+                </div>
+
                 <div class="col-md-6 mb-2">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Features</span>
                         </div>
 
-                        <input type="number" name="features" placeholder="Input data fatures" class="form-control"
-                            [(ngModel)]="newTask.definition.data_description.features" #features="ngModel" required>
+                        <input type="number" name="task-data-features" placeholder="Input data fatures"
+                            class="form-control" [(ngModel)]="newTask.definition.data_description.features"
+                            #features="ngModel" required>
                     </div>
                     <alert type="danger"
                         *ngIf="(features.invalid && (features.dirty || features.touched)) || form.submitted && features.errors">
@@ -204,14 +269,15 @@
                     <small id="featuresHelp" class="form-text text-muted">Number of features.</small>
                 </div>
 
-                <div class="col-md-6 mb-2">
+                <div class="col-md-6 mb-2" *ngIf="isSupervised">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Labels</span>
                         </div>
 
-                        <input type="number" placeholder="Input data labels" name="labels" class="form-control"
-                            [(ngModel)]="newTask.definition.data_description.labels" #labels="ngModel" required>
+                        <input type="number" placeholder="Input data labels" name="task-data-labels"
+                            class="form-control" [(ngModel)]="newTask.definition.data_description.labels"
+                            #labels="ngModel" required>
                     </div>
                     <alert type="danger"
                         *ngIf="(labels.invalid && (labels.dirty || labels.touched)) || form.submitted && labels.errors">
@@ -219,6 +285,14 @@
                     </alert>
                     <small id="labelsHelp" class="form-text text-muted">Number of labels.</small>
                 </div>
+            </div>
+
+            <div class="custom-control custom-checkbox mt-2">
+                <input type="checkbox" name="task-data-has-header" class="custom-control-input"
+                    [(ngModel)]="newTask.definition.disconnect_bad_workers" id="disconnect-bad-workers">
+                <label class="custom-control-label" for="disconnect-bad-workers">Kick out malicious workers</label>
+                <small id="disconnect-bad-workers-help" class="mt-0 form-text text-muted">Workers whose data don't
+                    respect data description files will be disconnected. If false, task will be terminated.</small>
             </div>
         </div>
 
@@ -229,4 +303,21 @@
             </div>
         </div>
     </form>
+</div>
+
+<div bsModal #propertiesModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left" *ngIf="algorithm">{{ algorithm.label }} Properties</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="propertiesModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="algorithm">
+                <app-properties-editor [properties]="algorithm.properties" propInputId="preprocessing-prop"
+                    propHelpId="preprocessing-help" [fullWidth]="true"></app-properties-editor>
+            </div>
+        </div>
+    </div>
 </div>

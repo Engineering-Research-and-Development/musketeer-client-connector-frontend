@@ -6,18 +6,24 @@ import { AuthenticatedComponent } from './authenticated.component';
 import { TasksModule } from '../tasks/tasks.module';
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { WorkerModule } from '../worker/worker.module';
 import { SettingsModule } from '../settings/settings.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { DatasetsModule } from '../datasets/datasets.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ModelsModule } from '../models/models.module';
+import { CollapseModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [AuthenticatedComponent],
   imports: [
     CommonModule,
     TasksModule,
-    WorkerModule,
+    DatasetsModule,
+    ModelsModule,
     SettingsModule,
+    FontAwesomeModule,
     NgxSpinnerModule,
+    CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     AuthenticatedRoutingModule
   ]

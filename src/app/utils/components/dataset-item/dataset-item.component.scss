@@ -14,4 +14,15 @@
             color: $info-light-blue;
         }
     }
+
+    .format-badge {
+        display: inline-block;
+        padding: 0.125rem 0.5rem;
+        border-radius: 0.25rem;
+        background-color: #fcfcfc;
+        border: 1px solid #d5d5d5;
+        line-height: 1;
+        font-weight: 500;
+        color: #757575;
+    }
 }

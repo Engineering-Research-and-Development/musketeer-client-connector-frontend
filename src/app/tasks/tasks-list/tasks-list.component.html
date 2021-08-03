@@ -2,7 +2,7 @@
     <div id="top-tools">
         <div class="row align-items-center mb-3">
             <div class="col">
-                <h5 class="mb-0">Task List</h5>
+                <h5 class="mb-0">Tasks List</h5>
             </div>
 
             <div class="col-4 text-right tools">
@@ -64,286 +64,72 @@
         </div>
     </div>
 
-    <ng-container *ngIf="tasks; else loading">
-        <div class="row mb-3 align-items-center justify-content-center"
-            *ngIf="(tasks | filterBy:[search, 'task_name'] | filterBy:[privacy > 0 ? privacy : null, 'definition.POM'] | filterBy:[status != 'All' ? status : null, 'status']).length">
-            <div class="col-md-6">
-                <pagination
-                    [totalItems]="(tasks | filterBy:[search, 'task_name'] | filterBy:[privacy > 0 ? privacy : null, 'definition.POM'] | filterBy:[status != 'All' ? status : null, 'status']).length"
-                    [boundaryLinks]="true" [itemsPerPage]="tasksPerPage" [maxSize]="10" previousText="&lsaquo;"
-                    nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;" [ngModel]="currentPage"
-                    (ngModelChange)="updatePageTasks($event)"></pagination>
-            </div>
-
-            <div class="col-md-3">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Items per page</span>
-                    </div>
-                    <select class="form-control" [(ngModel)]="tasksPerPage">
-                        <option>10</option>
-                        <option>25</option>
-                        <option>50</option>
-                    </select>
-                </div>
-            </div>
-
-        </div>
-
-        <alert type="info" *ngIf="currentPageTasks.length == 0">
-            <i class="fa fa-info-circle mr-2"></i>
-            No tasks found!
-        </alert>
-
-        <div id="list-wrapper" *ngIf="currentPageTasks.length > 0">
-            <accordion [isAnimated]="true">
-                <accordion-group *ngFor="let t of currentPageTasks; index as i" class="mb-2">
-                    <div class="row" accordion-heading>
-                        <div class="col">
-                            <app-task-status-icon [status]="t.status"></app-task-status-icon>
-
-                            <h5 class="d-inline mb-0 mr-2">{{ t.task_name }}</h5>
-                            <span class="badge privacy badge-secondary align-middle text-white" tooltip="Privacy level"
-                                placement="top">
-                                <fa-icon [icon]="faKey"></fa-icon>
-                                POM{{ t.definition.POM }}
-                            </span>
-
+    <app-custom-tabs>
+        <app-custom-tab label="All">
+            <app-custom-tab-pane>
+                <ng-container *ngIf="tasks; else loading">
+                    <div class="row mb-3 align-items-center justify-content-center"
+                        *ngIf="(tasks | filterBy:[search, 'task_name'] | filterBy:[privacy > 0 ? privacy : null, 'definition.POM'] | filterBy:[status != 'All' ? status : null, 'status']).length">
+                        <div class="col-md-6">
+                            <pagination
+                                [totalItems]="(tasks | filterBy:[search, 'task_name'] | filterBy:[privacy > 0 ? privacy : null, 'definition.POM'] | filterBy:[status != 'All' ? status : null, 'status']).length"
+                                [boundaryLinks]="true" [itemsPerPage]="tasksPerPage" [maxSize]="5"
+                                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+                                [ngModel]="currentPage" (ngModelChange)="updatePageTasks($event)"></pagination>
                         </div>
-                        <div class="col-3 text-right">
-                            <small class="text-muted" tooltip="Created"
-                                placement="top">{{ t.added | date:'d MMMM yyyy HH:mm' }}</small>
-                        </div>
-                    </div>
-                    <div class="row align-items-center justify-content-between">
-                        <div class="col-4">
-                            <table class="table table-borderless mb-0">
-                                <tr>
-                                    <th scope="row" width="30%">Topology</th>
-                                    <td>{{ t.topology }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" width="30%">Quorum</th>
-                                    <td>{{ t.definition.quorum }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" width="30%">Status</th>
-                                    <td>
-                                        <app-status-badge [status]="t.status"></app-status-badge>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-4 text-right">
-                            <div class="btn-group" role="group">
-                                <button class="btn btn-light border text-info" (click)="openModal(taskModal, t)"
-                                    tooltip="Details">
-                                    <i class="fa fa-info-circle fa-fw"></i>
-                                </button>
-                                <button class="btn btn-light border text-info" (click)="getLogs(t)" tooltip="Logs">
-                                    <i class="fa fa-align-left fa-fw"></i>
-                                </button>
-                                <ng-container *ngIf="t.status != 'COMPLETE' && t.status != 'FAILED'">
-                                    <button class="btn btn-light border text-success" (click)="taskAction(t, false)"
-                                        tooltip="Join">
-                                        <fa-icon class="fa-fw" [icon]="faUserPlus"></fa-icon>
-                                    </button>
 
-                                    <ng-container *ngIf="t.definition.owner == user.user && t.status != 'STARTED'">
-                                        <button class="btn btn-success" (click)="taskAction(t, true)"
-                                            tooltip="Aggregate" *ngIf="t.status != 'COMPLETE'">
-                                            <fa-icon [icon]="faNetworkWired" class="fa-fw"></fa-icon>
-                                        </button>
-                                    </ng-container>
-                                </ng-container>
-                                <ng-container *ngIf="t.definition.owner == user.user">
-                                    <button class="btn btn-warning" (click)="taskResult(t.task_name)" tooltip="Result"
-                                        *ngIf="t.status == 'COMPLETE'">
-                                        <fa-icon [icon]="faChartBar" class="fa-fw text-white"></fa-icon>
-                                    </button>
-                                    <button class="btn btn-danger" (click)="openModal(deleteModal, t)" tooltip="Delete">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </ng-container>
-                            </div>
-                        </div>
-                    </div>
-                </accordion-group>
-            </accordion>
-        </div>
-    </ng-container>
-</div>
-
-<ng-template #taskModal>
-    <ng-container *ngIf="task">
-        <div class="modal-header">
-            <h5 class="modal-title pull-left">{{ task.task_name }}</h5>
-            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <app-task-detail [task]="task"></app-task-detail>
-        </div>
-        <div class="modal-footer bg-light text-muted">
-            <div class="pull-left" *ngIf="task.definition.owner">
-                <i class="fa fa-user mr-2"></i>
-                <b>{{ task.definition.owner }}</b>
-            </div>
-            <small>{{ task.added | date:'dd MMMM yyyy HH:mm:ss' }}</small>
-        </div>
-    </ng-container>
-</ng-template>
-
-<div bsModal #logsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title pull-left" *ngIf="task">{{ task.task_name }} Logs</h5>
-                <button type="button" class="close pull-right" aria-label="Close" (click)="logsModal.hide()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="logs" *ngIf="logs; else loading">
-                    {{ logs }}
-                </p>
-            </div>
-            <!-- <div class="modal-footer bg-light text-muted"></div> -->
-        </div>
-    </div>
-</div>
-
-<div bsModal #taskActionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title pull-left">Start Task {{ aggregation ? 'Aggregation' : 'Worker' }}</h5>
-                <button type="button" class="close pull-right" aria-label="Close" (click)="taskActionModal.hide()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-6">
-                        <h6 class="mb-2">
-                            <i class="fa fa-list-ul"></i>
-                            Available datasets
-                        </h6>
-
-                        <ul class="list-group" style="max-height: 300px; overflow-y: auto;" *ngIf="files; else loading">
-                            <app-dataset-item *ngFor="let dataset of files" draggable [dragData]="dataset"
-                                [dataset]="dataset" [selected]="selectedFile == dataset"
-                                (datasetSelected)="selectedFile = $event"></app-dataset-item>
-                        </ul>
-                    </div>
-
-                    <div class="col-6">
-                        <div class="mb-3" *ngIf="!aggregation">
-                            <h6>Training Dataset</h6>
-                            <div class="drop-container" droppable (onDrop)="datasets.training = $event.dragData">
-                                <div class="drop-zone" *ngIf="!datasets.training">-- drop dataset here --</div>
-
-                                <div class="row mr-0" *ngIf="datasets.training">
-                                    <div class="col">
-                                        <app-dataset-item [dataset]="datasets.training"></app-dataset-item>
-                                    </div>
-                                    <button class="btn btn-sm bg-transparent border-none shadow-none"
-                                        (click)="datasets.training = null">
-                                        <i class="fa fa-close"></i>
-                                    </button>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Items per page</span>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <h6>Validation Dataset</h6>
-                            <div class="drop-container" droppable (onDrop)="datasets.validation = $event.dragData">
-                                <div class="drop-zone" *ngIf="!datasets.validation">-- drop dataset here --</div>
-
-                                <div class="row mr-0" *ngIf="datasets.validation">
-                                    <div class="col">
-                                        <app-dataset-item [dataset]="datasets.validation"></app-dataset-item>
-                                    </div>
-                                    <button class="btn btn-sm bg-transparent border-none shadow-none"
-                                        (click)="datasets.validation = null">
-                                        <i class="fa fa-close"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <h6>Test Dataset</h6>
-                        <div class="drop-container" droppable (onDrop)="datasets.test = $event.dragData">
-                            <div class="drop-zone" *ngIf="!datasets.test">-- drop dataset here --</div>
-
-                            <div class="row mr-0" *ngIf="datasets.test">
-                                <div class="col">
-                                    <app-dataset-item [dataset]="datasets.test"></app-dataset-item>
-                                </div>
-                                <button class="btn btn-sm bg-transparent border-none shadow-none"
-                                    (click)="datasets.test = null">
-                                    <i class="fa fa-close"></i>
-                                </button>
+                                <select class="form-control" [(ngModel)]="tasksPerPage">
+                                    <option>25</option>
+                                    <option>50</option>
+                                    <option>100</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="modal-footer">
-                <button class="btn btn-light border" type="button" (click)="taskActionModal.hide()">Cancel</button>
-                <button class="btn btn-success pull-right" (click)="start()">Start</button>
-            </div>
-        </div>
-    </div>
+                    <alert type="info" *ngIf="currentPageTasks.length == 0">
+                        <i class="fa fa-info-circle mr-2"></i>
+                        No tasks found!
+                    </alert>
+
+                    <ng-container *ngIf="currentPageTasks.length > 0">
+                        <app-tasks-table [tasks]="currentPageTasks" [currentPage]="currentPage"
+                            [itemsPerPage]="tasksPerPage">
+                        </app-tasks-table>
+                    </ng-container>
+                </ng-container>
+            </app-custom-tab-pane>
+        </app-custom-tab>
+
+        <!-- <app-custom-tab label="Joined">
+                <app-custom-tab-pane>
+                    Lista dei task joinati.
+                </app-custom-tab-pane>
+            </app-custom-tab> -->
+
+        <app-custom-tab label="My Tasks">
+            <app-custom-tab-pane>
+                <ng-container *ngIf="tasks; else loading">
+                    <alert type="info" *ngIf="currentPageTasks.length == 0">
+                        <i class="fa fa-info-circle mr-2"></i>
+                        No tasks found!
+                    </alert>
+
+                    <ng-container *ngIf="tasks.length > 0">
+                        <app-tasks-table [tasks]="createdTasks" [currentPage]="currentPage"
+                            [itemsPerPage]="tasksPerPage">
+                        </app-tasks-table>
+                    </ng-container>
+                </ng-container>
+            </app-custom-tab-pane>
+        </app-custom-tab>
+    </app-custom-tabs>
 </div>
-
-<div bsModal #taskResultModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title pull-left">Task Result</h5>
-                <button type="button" class="close pull-right" aria-label="Close" (click)="taskResultModal.hide()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" *ngIf="imageUrl">
-                <span>Trained model generated the following prediction chart.</span>
-
-                <div class="text-center">
-                    <img [src]="imageUrl" width="90%">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-light border" type="button" (click)="taskResultModal.hide()">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<ng-template #deleteModal>
-    <div class="modal-header">
-        <h5 class="modal-title pull-left">Delete Task</h5>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <div class="mb-3">
-            Are you sure to delete the task <b>"{{ task.task_name }}"</b>?
-        </div>
-
-        <alert type="warning">
-            <i class="fa fa-exclamation-triangle mr-2"></i>
-            <span>Remember, this operation cannot be undone.</span>
-        </alert>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-light border" type="button" (click)="modalRef.hide()">Cancel</button>
-        <button class="btn btn-danger pull-right" (click)="delete(task)">Delete</button>
-    </div>
-</ng-template>
 
 <ng-template #loading>
     <div class="row mx-0 py-3 justify-content-center">

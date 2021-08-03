@@ -1,0 +1,12 @@
+<ng-container [ngSwitch]="status">
+    <div class="spinner-grow training text-warning" *ngSwitchCase="'STARTED'"></div>
+    <i class="fa fa-check-circle text-success" *ngSwitchCase="'COMPLETE'"></i>
+    <fa-icon [icon]="faStopwatch" class="open-task" *ngSwitchCase="'CREATED'"></fa-icon>
+    <i class="fa fa-times-circle text-danger" *ngSwitchCase="'FAILED'"></i>
+
+    <span class="ml-2" [ngClass]="{
+            'text-warning': status == 'STARTED',
+            'text-success': status == 'COMPLETE',
+            'text-danger': status == 'FAILED'
+        }">{{ status }}</span>
+</ng-container>

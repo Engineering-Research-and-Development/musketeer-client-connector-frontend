@@ -1,11 +1,90 @@
-@import '~ngx-toastr/toastr';
-@import '~ng-drag-drop/style';
-@import 'assets/styles/variables';
+@import "~ngx-toastr/toastr";
+@import "~ng-drag-drop/style";
+@import "assets/styles/variables";
+@import "init";
 
 /* You can add global styles to this file, and also import other style files */
 .gradient-container {
-    background-image: linear-gradient(to right, $musketeer-light-red 0%, $musketeer-dark-red 50%, $musketeer-indigo 100%);
-    height: 100vh;
+    background-image: linear-gradient(
+        to right,
+        $musketeer-light-red 0%,
+        $musketeer-dark-red 50%,
+        $musketeer-indigo 100%
+    );
+    // background-image: linear-gradient(to top, #00000000, rgba($musketeer-dark-red, 0.25) 20%, rgba($musketeer-light-red, 0.25)),
+    //     linear-gradient(to right, rgba($musketeer-light-red, 0.5), rgba($musketeer-dark-red, 0.5), rgba($musketeer-light-red, 0.5)),
+    //     linear-gradient(to top, $musketeer-indigo, $musketeer-indigo);
+    min-height: 100vh;
+    height: 100%;
+}
+
+.circle-button {
+    border-radius: 50%;
+    text-align: center;
+    font-size: 0.9rem;
+    height: 35px;
+    width: 35px;
+    border-width: 1px;
+    border-style: solid;
+    background: transparent;
+    outline: none !important;
+
+    &[disabled] {
+        filter: grayscale(1);
+        opacity: 0.5;
+    }
+}
+
+.action-pill {
+    border-radius: 30px;
+    font-weight: 600;
+    padding: 0.125rem 0.75rem;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    outline: none !important;
+    color: #757575;
+
+    &:hover {
+        background-color: #eee;
+        color: #5f5f5f;
+    }
+    &:active {
+        background-color: #ddd;
+        border-color: #bbb;
+    }
+}
+
+.json-visualizer {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    color: #5f5f5f;
+    background-color: #f5f5f5;
+    border-radius: 0.25rem;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    opacity: 0.75;
+    padding: 0.25rem;
+
+    &:active,
+    &:focus {
+        outline: none;
+    }
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.btn-success,
+.btn-danger {
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 13px;
 }
 
 .text-gradient {
@@ -21,13 +100,21 @@
     outline: none;
 }
 
+a {
+    font-weight: 600;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
+
 .file-badge {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     border: 1px solid #ddd;
-    padding: .25rem .75rem;
-    border-radius: .25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
 
     b {
         display: block;
@@ -43,25 +130,31 @@
 .form-control {
     height: 2.15rem;
     font-size: 14px;
-    padding: .2rem .4rem;
+    padding: 0.2rem 0.4rem;
 }
 
 label {
     font-size: 13px;
     font-weight: 500;
-    margin-bottom: .25rem;
+    margin-bottom: 0.25rem;
 }
 
 .loading .spinner-border {
     width: 5em;
     height: 5em;
-    border-width: .4em;
+    border-width: 0.4em;
     // background-image: linear-gradient(to right, $musketeer-light-red, $musketeer-indigo);
 }
 
 .navbar {
     // background-image: linear-gradient(to right, rgba(0,0,0,0) 0% 15%, $musketeer-light-red, $musketeer-indigo 45%);
-    background-image: linear-gradient(to right, rgba(0,0,0,0) 0% 15%, $musketeer-light-red, $musketeer-dark-red 60%);
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0) 0% 15%,
+        $musketeer-light-red,
+        $musketeer-dark-red 60%,
+        $musketeer-indigo
+    );
     // background-image: linear-gradient(to right, rgba(0,0,0,0) 0% 15%, $musketeer-dark-red, $musketeer-indigo);
     // background-image: linear-gradient(to right, rgba(0,0,0,0), $musketeer-indigo);
     // background-image: linear-gradient(to right, rgba(0,0,0,0), $musketeer-light-red);
@@ -71,18 +164,19 @@ label {
     color: $info-blue;
     background-color: $info-white-blue;
     border-color: $info-almost-white-blue;
-    
+
     .text-subtitle {
-        color: $info-light-blue
+        color: $info-light-blue;
     }
     .additional-info {
-        font-size: .9em;
+        font-size: 0.9em;
     }
     .btn-info {
         background-color: $info-blue;
     }
-    .btn-info.focus, .btn-info:focus {
-        box-shadow: 0 0 0 0.2rem rgba(11, 88, 133, .25)
+    .btn-info.focus,
+    .btn-info:focus {
+        box-shadow: 0 0 0 0.2rem rgba(11, 88, 133, 0.25);
     }
     .btn-info:hover {
         background-color: #0f73ad;
@@ -94,3 +188,6 @@ label {
         border-color: #0f73ad;
     }
 }
+
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

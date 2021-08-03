@@ -1,19 +1,34 @@
 <li class="list-group-item dataset-item"
-    [ngClass]="{'list-group-item-action action': !readOnly, 'selected': selected }" (click)="datasetSelected.emit(dataset)">
-    <div class="row">
-        <ng-container *ngIf="!readOnly">
+    [ngClass]="{'list-group-item-action action': !readOnly, 'selected': selected }">
+    <div class="row align-items-center">
+        <!-- <ng-container *ngIf="!readOnly">
             <div class="col-1" *ngIf="selected">
                 <i class="fa fa-lg fa-check text-success"></i>
             </div>
-        </ng-container>
+        </ng-container> -->
 
         <div class="col text-truncate">
             <h6 class="mb-0">{{ dataset.name }}</h6>
-            <small [tooltip]="dataset.path" container="body">{{ dataset.path }}</small>
+            <small class="text-muted">
+                <strong>Format</strong>
+                &nbsp;
+                <span class="format-badge">{{ dataset.format }}</span>
+            </small>
         </div>
         <div class="col-4 text-right">
             <h6 class="mb-0">{{ dataset.dimension | bytes: 2 }}</h6>
             <small>{{ dataset.added | date:'dd MMMM yyyy HH:mm' }}</small>
         </div>
+
+        <ng-container *ngIf="editable">
+            <div class="px-3 border-left text-center">
+                <button class="btn btn-sm btn-warning text-white" (click)="edit.emit(dataset)">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-danger ml-2" (click)="deleted.emit(dataset)">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </ng-container>
     </div>
 </li>

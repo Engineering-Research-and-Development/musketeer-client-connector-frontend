@@ -1,13 +1,105 @@
-.table {
-    &.task-general {
-        th, td {
-            padding: .3em;
+.card-top {
+    border-bottom: 1px solid #ddd;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+
+    .task-name {
+        font-size: 1.75rem;
+        font-weight: 400;
+        margin: 0;
+    }
+    .task-description {
+        color: #8c8c8c;
+    }
+    .task-actions {
+        margin: 0.5rem 0;
+    }
+}
+
+.preprocessing-canvas {
+    padding: 1rem;
+    background-color: #f3f3f3;
+    border-radius: 0.25rem;
+    display: flex;
+
+    .pipeline-item {
+        position: relative;
+        border-radius: 30px;
+        border: 1px solid #d5d5d5;
+        padding: 0.125rem 0.5rem;
+        background-color: white;
+        text-align: center;
+
+        &:not(:first-of-type) {
+            margin-top: 25px;
+
+            &:before {
+                content: "";
+                position: absolute;
+                left: 50%;
+                top: -25px;
+                height: 25px;
+                transform: translateX(-50%);
+                border-left: 3px dotted #d5d5d5;
+            }
         }
     }
 
-    &.task-advanced {
+    .properties-table {
+        // min-width: 200px;
+    
         th, td {
-            padding: .35em .75rem;
+            padding: 0.25rem 0.5rem;
+        }
+    
+        th[scope="col"] {
+            font-weight: 600;
         }
     }
+}
+
+
+.drop-zone {
+    text-align: center;
+    color: #888;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    background-color: #f0f3f3;
+    box-shadow: inset 0 0 0.5rem #ccc;
+}
+
+.plain-table {
+    width: 100%;
+    margin: 0 auto;
+
+    tr {
+        &:not(:last-of-type) {
+            border-bottom: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 0.5rem;
+        }
+
+        th {
+            width: 40%;
+
+            &[scope="col"] {
+                font-weight: 500;
+            }
+        }
+        td {
+            text-align: right;
+        }
+    }
+}
+
+.task-status {
+    padding: 0.125rem 0.5rem;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    background-color: white;
 }

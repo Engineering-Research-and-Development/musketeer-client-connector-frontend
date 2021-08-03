@@ -1,0 +1,18 @@
+<div class="custom-tabs-header">
+    <div class="custom-tab-label" (click)="selectTab(item, i)" [class.active]="activeTab === item"
+        *ngFor="let item of tabItems$ | async; index as i">
+        <ng-container *ngIf="item.labelComponent">
+            <ng-container *ngTemplateOutlet="item.labelComponent.labelContent">
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!item.labelComponent">
+            {{ item.label }}
+        </ng-container>
+    </div>
+</div>
+<div class="custom-tab-pane">
+    <ng-container *ngIf="activeTab && activeTab.bodyComponent">
+        <ng-container *ngTemplateOutlet="activeTab.bodyComponent.bodyContent">
+        </ng-container>
+    </ng-container>
+</div>

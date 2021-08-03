@@ -25,9 +25,13 @@ export class TasksService {
     private globals: Globals
   ) { }
 
-  getTask(id: number) { return this.http.get<Task>(`${this.globals.TASKS_URL}/${id}`) }
-
   getTasks() { return this.http.get<TaskSpecification[]>(this.globals.TASKS_URL) }
+
+  getJoinedTasks() { return this.http.get<TaskSpecification[]>(`${this.globals.TASKS_URL}/joined`) }
+
+  getCreatedTasks() { return this.http.get<TaskSpecification[]>(`${this.globals.TASKS_URL}/created`) }
+
+  getTask(name: string) { return this.http.get<TaskSpecification>(`${this.globals.TASKS_URL}/${name}`) }
 
   getTaskResultImage(name: string) { return this.http.get<Blob>(`${this.globals.RESULTS_URL}/image?task=${name}`, { responseType: 'blob' as 'json' }) }
 

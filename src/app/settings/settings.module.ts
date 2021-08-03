@@ -5,15 +5,21 @@ import { EditConfigurationsComponent } from './edit-configurations/edit-configur
 import { FormsModule } from '@angular/forms';
 import { AccordionModule, ModalModule, TooltipModule } from 'ngx-bootstrap';
 import { UtilsModule } from '../utils/utils.module';
+import { RouterModule } from '@angular/router';
+import { ProfileComponent } from './profile/profile.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
   declarations: [
     EditConfigurationsComponent,
+    ProfileComponent,
   ],
   imports: [
     CommonModule,
+    RouterModule,
     FormsModule,
+    FontAwesomeModule,
     UtilsModule,
     AccordionModule.forRoot(),
     TooltipModule.forRoot(),

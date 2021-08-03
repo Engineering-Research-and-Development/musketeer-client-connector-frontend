@@ -1,0 +1,37 @@
+<div class="table-wrapper">
+    <table class="tasks-table">
+        <thead>
+            <tr>
+                <th class="text-center" width="5%">#</th>
+                <th width="35%">Name</th>
+                <th class="text-center" width="20%">Privacy Level</th>
+                <th class="text-center" width="20%">Status</th>
+                <th class="text-center" width="20%">Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let task of tasks; index as i">
+                <th scope="col" class="text-center">{{
+                    currentPage > 1
+                    ? (i + 1) + (itemsPerPage * (currentPage - 1))
+                    : i + 1
+                    }}</th>
+                <td>
+                    <a [routerLink]="task.task_name">{{ task.task_name }}</a>
+                </td>
+                <td class="text-center">
+                    <div class="badge privacy badge-secondary align-middle text-white" placement="top">
+                        <fa-icon [icon]="faKey"></fa-icon>
+                        <span class="ml-2">POM{{ task.definition?.POM }}</span>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <app-task-status [status]="task.status"></app-task-status>
+                </td>
+                <td class="text-center">
+                    <span class="text-muted">{{ task.added | date:'d MMMM yyyy HH:mm' }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

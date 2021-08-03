@@ -1,0 +1,41 @@
+@import "./assets/styles/variables.scss";
+
+$ghost-colors: (
+    info: $musketeer-info,
+    primary: $musketeer-primary,
+    success: $musketeer-success,
+    danger: $musketeer-danger,
+    warning: $musketeer-warning,
+    alernative: $musketeer-violet,
+    accent: $musketeer-orange,
+);
+
+@each $name, $color in $ghost-colors {
+    .text-#{$name} {
+        color: $color;
+    }
+    .bg-#{$name} {
+        background-color: $color;
+    }
+    .border-#{$name} {
+        border: 1px solid $color;
+    }
+
+    .circle-button {
+
+        &.variant-#{$name} {
+            border-color: $color;
+            color: $color;
+
+            &:not([disabled]):hover {
+                background-color: rgba($color, 0.125);
+                box-shadow: inset 0 0 0 2px $color;
+            }
+            &:not([disabled]):active {
+                background-color: rgba($color, 0.5);
+                box-shadow: inset 0 0 0 2px $color;
+            }
+        }
+
+    }
+}

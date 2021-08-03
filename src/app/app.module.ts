@@ -14,6 +14,10 @@ import { AlertModule } from 'ngx-bootstrap';
 import { UtilsModule } from './utils/utils.module';
 import { ConfigureComponent } from './configure/configure.component';
 import { HttpInterceptorService } from './utils/services/http-interceptor.service';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -23,18 +27,24 @@ import { HttpInterceptorService } from './utils/services/http-interceptor.servic
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     FormsModule,
     UtilsModule,
     NgxSpinnerModule,
     HttpClientModule,
     AuthenticatedModule,
     AppRoutingModule,
+    ToastrModule.forRoot({
+      preventDuplicates: true,
+    }),
     AlertModule.forRoot(),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    DragDropModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
-    CookieService
+    CookieService,
+    ToastrService,
   ],
   bootstrap: [AppComponent]
 })

@@ -12,36 +12,51 @@ import { MmllConfigFormComponent } from './components/mmll-config-form/mmll-conf
 import { FormsModule } from '@angular/forms';
 import { CommsConfigFormComponent } from './components/comms-config-form/comms-config-form.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
-import { TooltipModule } from 'ngx-bootstrap';
+import { AlertModule, TooltipModule } from 'ngx-bootstrap';
 import { DatasetItemComponent } from './components/dataset-item/dataset-item.component';
 import { PrettyJsonPipe } from './pipes/pretty-json.pipe';
-import { StatusBadgeComponent } from './components/status-badge/status-badge.component';
-import { TaskStatusIconComponent } from './components/task-status-icon/task-status-icon.component';
+import { TaskStatusComponent } from './components/task-status/task-status.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TasksTableComponent } from './components/tasks-table/tasks-table.component';
+import { ChangePasswordFormComponent } from './components/change-password-form/change-password-form.component';
+import { CustomTabsComponent } from './components/custom-tabs/custom-tabs.component';
+import { CustomTabComponent } from './components/custom-tab/custom-tab.component';
+import { CustomTabLabelComponent } from './components/custom-tab-label/custom-tab-label.component';
+import { CustomTabPaneComponent } from './components/custom-tab-pane/custom-tab-pane.component';
+import { RouterModule } from '@angular/router';
+import { PropertiesEditorComponent } from './components/properties-editor/properties-editor.component';
 
 @NgModule({
   imports: [
-      CommonModule,
-      FormsModule,
-      FontAwesomeModule,
-      TooltipModule.forRoot(),
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    FontAwesomeModule,
+    TooltipModule.forRoot(),
+    AlertModule.forRoot(),
   ],
   declarations: [
-      ObjectKeysPipe,
-      SortByPipe,
-      FilterByPipe,
-      BytesPipe,
-      PrettyJsonPipe,
-      RatingComponent,
-      RadioButtonsComponent,
-      LoaderComponent,
-      StepperComponent,
-      MmllConfigFormComponent,
-      CommsConfigFormComponent,
-      FileUploadComponent,
-      DatasetItemComponent,
-      StatusBadgeComponent,
-      TaskStatusIconComponent,
+    ObjectKeysPipe,
+    SortByPipe,
+    FilterByPipe,
+    BytesPipe,
+    PrettyJsonPipe,
+    RatingComponent,
+    RadioButtonsComponent,
+    LoaderComponent,
+    StepperComponent,
+    MmllConfigFormComponent,
+    CommsConfigFormComponent,
+    FileUploadComponent,
+    DatasetItemComponent,
+    TaskStatusComponent,
+    TasksTableComponent,
+    ChangePasswordFormComponent,
+    CustomTabsComponent,
+    CustomTabComponent,
+    CustomTabLabelComponent,
+    CustomTabPaneComponent,
+    PropertiesEditorComponent,
   ],
   exports: [
     ObjectKeysPipe,
@@ -57,8 +72,14 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CommsConfigFormComponent,
     FileUploadComponent,
     DatasetItemComponent,
-    StatusBadgeComponent,
-    TaskStatusIconComponent
+    TaskStatusComponent,
+    TasksTableComponent,
+    ChangePasswordFormComponent,
+    CustomTabsComponent,
+    CustomTabComponent,
+    CustomTabLabelComponent,
+    CustomTabPaneComponent,
+    PropertiesEditorComponent,
   ]
 })
 export class UtilsModule { }

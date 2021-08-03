@@ -4,8 +4,7 @@ import { Globals } from 'src/app/globals';
 
 export class CommsConfiguration {
   comms_git_url: string;
-  comms_git_user: string;
-  comms_git_password: string;
+  comms_git_token: string;
   comms_module: string;
   comms_config: any;
 
@@ -17,8 +16,7 @@ export class CommsConfiguration {
 
 export class MMLLConfiguration {
   mmll_git_url: string;
-  mmll_git_user: string;
-  mmll_git_password: string;
+  mmll_git_token: string;
   mmll_masternode_classpath: string;
   mmll_workernode_classpath: string;
   mmll_comms_master_wrapper_classpath: string;

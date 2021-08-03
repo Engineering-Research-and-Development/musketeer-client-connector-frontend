@@ -1,88 +1,348 @@
-<h6 class="text-muted">General Information</h6>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a routerLink="/tasks">
+                <i class="fa fa-home"></i>
+                <span class="ml-1">Home</span>
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{ task_name }}</li>
+    </ol>
+</nav>
 
-<table class="table table-borderless task-general">
-    <tbody>
-        <tr *ngIf="task.definition.task_description">
-            <td style="width: 50%;">
-                <h6 class="d-inline mb-0">Description</h6>
-            </td>
-            <td>
-                <span>{{ task.definition.task_description }}</span>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 50%;">
-                <h6 class="d-inline mb-0">Algorithm</h6>
-            </td>
-            <td>
-                <span>{{ task.definition.algorithm_name || 'Not specified' }}</span>
-                <span class="text-muted"> ({{ task.definition.algorithm_type }})</span>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 50%;">
-                <h6 class="d-inline mb-0">Status</h6>
-            </td>
-            <td>
-                <app-status-badge [status]="task.status"></app-status-badge>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 50%;">
-                <h6 class="d-inline mb-0">Topology</h6>
-            </td>
-            <td>{{ task.topology }}</td>
-        </tr>
-        <tr>
-            <td style="width: 50%;">
-                <h6 class="d-inline mb-0">Quorum</h6>
-            </td>
-            <td>{{ task.definition.quorum }}</td>
-        </tr>
-    </tbody>
-</table>
+<ng-container *ngIf="task; else loading">
+    <div class="card mb-3">
+        <div class="card-top">
+            <div class="col-md-8">
+                <h3 class="task-name">{{ task.task_name || task_name }}</h3>
+                <span class="text-muted">{{ task.added | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+            </div>
+            <div class="task-actions col text-right">
+                <button class="circle-button variant-warning" *ngIf="task.actions.aggregate >= 0" [disabled]="task.actions.aggregate == 0" (click)="taskAction(true)">
+                    <fa-icon [icon]="faNetworkWired" [fixedWidth]="true"></fa-icon>
+                </button>
+                <button class="circle-button variant-success ml-2" *ngIf="task.actions.participate >= 0" [disabled]="task.actions.participate == 0" (click)="taskAction(false)">
+                    <fa-icon [icon]="faUserPlus" [fixedWidth]="true"></fa-icon>
+                </button>
+                <button class="circle-button variant-info ml-2" *ngIf="task.actions.logs >= 0" [disabled]="task.actions.logs == 0" (click)="getLogs()">
+                    <i class="fa fa-align-left fa-fw"></i>
+                </button>
+                <button class="circle-button variant-accent ml-2" *ngIf="task.actions.result >= 0" [disabled]="task.actions.result == 0" (click)="taskResult()">
+                    <fa-icon [icon]="faChartBar" [fixedWidth]="true"></fa-icon>
+                </button>
+                <button class="circle-button variant-danger ml-2" *ngIf="task.actions.delete == 1" (click)="deleteModal.show()">
+                    <i class="fa fa-trash fa-fw"></i>
+                </button>
+            </div>
+        </div>
 
-<ng-container *ngIf="task.definition.data_description">
-    <h6 class="text-muted">Data Description</h6>
+        <div class="card-body px-5">
+            <table class="plain-table">
+                <tbody>
+                    <tr *ngIf="task.definition.task_description">
+                        <th scope="col">Description</th>
+                        <td>{{ task.definition.task_description }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Algorithm</th>
+                        <td>
+                            <ng-container *ngIf="task.definition.algorithm_name">
+                                <span>{{ task.definition.algorithm_name }}</span>
+                                <span class="text-muted"> ({{ task.definition.algorithm_type }})</span>
+                            </ng-container>
+                            <ng-container *ngIf="!task.definition.algorithm_name">
+                                <span class="text-muted">Not specified</span>
+                            </ng-container>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Status</th>
+                        <td>
+                            <app-task-status [status]="task.status"></app-task-status>
+                        </td>
+                    </tr>
+                    <tr *ngIf="task.topology">
+                        <th scope="col">Topology</th>
+                        <td>{{ task.topology }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Quorum</th>
+                        <td>{{ task.definition.quorum }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br>
+
+            <ng-container *ngIf="task.definition.data_description">
+                <h6 class="text-muted">Data Description</h6>
+
+                <table class="plain-table">
+                    <tbody>
+                        <tr>
+                            <th scope="col">Features</th>
+                            <td>{{ task.definition.data_description.features }}</td>
+                        </tr>
+                        <tr *ngIf="task.definition.data_description.labels">
+                            <th scope="col">Labels</th>
+                            <td>{{ task.definition.data_description.labels }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="col">Input Data Description</th>
+                            <td>
+                                <button class="action-pill" (click)="openDataDescriptionModal()">
+                                    <i class="fa fa-align-left"></i>
+                                    <span class="ml-2">Details</span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="task.definition.target_data_description">
+                            <th scope="col">Target Data Description</th>
+                            <td>
+                                <button class="action-pill" (click)="openDataDescriptionModal(true)">
+                                    <i class="fa fa-align-left"></i>
+                                    <span class="ml-2">Details</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <br>
+            </ng-container>
+
+            <ng-container *ngIf="task.definition.preprocessing">
+                <h6 class="text-muted">Preprocessing</h6>
+
+                <div class="preprocessing-canvas">
+                    <div class="pipeline-container col-12 col-md-6 col-lg-3">
+                        <ng-container *ngFor="let algo of task.definition.preprocessing">
+                            <div class="pipeline-item" [tooltip]="propsTooltip" placement="right">
+                                {{ algo.label }}
+                            </div>
     
-    <table class="table table-borderless task-general">
-        <tbody>
-            <tr>
-                <td style="width: 50%;">
-                    <h6 class="d-inline mb-0">Features</h6>
-                </td>
-                <td>{{ task.definition.data_description.features }}</td>
-            </tr>
-            <tr>
-                <td style="width: 50%;">
-                    <h6 class="d-inline mb-0">Labels</h6>
-                </td>
-                <td>{{ task.definition.data_description.labels }}</td>
-            </tr>
-        </tbody>
-    </table>
+                            <ng-template #propsTooltip>
+                                <table class="properties-table" *ngIf="algo.properties">
+                                    <tbody>
+                                        <tr *ngFor="let prop of algo.properties">
+                                            <th scope="col">{{ prop.label }}</th>
+                                            <td>{{ prop.value }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <span *ngIf="!algo.properties">This algorithm has no properties.</span>
+                            </ng-template>
+                        </ng-container>
+                    </div>
+                </div>
+
+
+                <br>
+            </ng-container>
+
+            <h6 class="text-muted">Advanced Information</h6>
+            <table class="plain-table">
+                <tbody>
+                    <ng-container *ngFor="let prop of task.definition | keys">
+                        <tr
+                            *ngIf="prop != 'POM' && prop != 'algorithm_name' && prop != 'task_name' && prop != 'algorithm_type'
+                                && prop != 'data_description' && prop != 'model_architecture' && prop != 'quorum'
+                                && prop != 'task_description' && prop != 'owner' && prop != 'input_data_description' && prop != 'target_data_description' && prop != 'preprocessing'">
+                            <th scope="col">{{ prop }}</th>
+                            <td>{{ task.definition[prop] }}</td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </ng-container>
 
-
-<accordion [isAnimated]="true">
-    <accordion-group>
-        <div accordion-heading>
-            <h6 class="text-muted mb-0">Advanced Information</h6>
+<div bsModal #dataDescriptionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left" *ngIf="task">{{ task.task_name }} Data Description</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="dataDescriptionModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="selectedDataDescription">
+                <pre class="json-visualizer">{{ selectedDataDescription | json }}</pre>
+            </div>
+            <!-- <div class="modal-footer bg-light text-muted"></div> -->
         </div>
-        <table class="table table-borderless task-advanced mb-0">
-            <tbody>
-                <ng-container *ngFor="let prop of task.definition | keys">
-                    <tr class="border-bottom"
-                        *ngIf="prop != 'POM' && prop != 'algorithm_name' && prop != 'algorithm_type'
-                            && prop != 'data_description' && prop != 'model_architecture' && prop != 'quorum'
-                            && prop != 'task_description' && prop != 'owner'">
-                        <td>
-                            <h6 class="d-inline mb-0">{{ prop }}</h6>
-                        </td>
-                        <td class="text-center">{{ task.definition[prop] }}</td>
-                    </tr>
+    </div>
+</div>
+
+<div bsModal #logsModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left" *ngIf="task">{{ task.task_name }} Logs</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="logsModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ng-container class="logs" *ngIf="logs; else loading">
+                    <alert type="danger" *ngIf="logsError">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        <span class="ml-2">{{ logs }}</span>
+                    </alert>
+
+                    <p class="logs" *ngIf="!logsError">{{ logs }}</p>
                 </ng-container>
-            </tbody>
-        </table>
-    </accordion-group>
-</accordion>
+            </div>
+            <!-- <div class="modal-footer bg-light text-muted"></div> -->
+        </div>
+    </div>
+</div>
+
+<div bsModal #taskActionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left">Start Task {{ aggregation ? 'Aggregation' : 'Worker' }}</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="taskActionModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <h6 class="mb-2">
+                            <i class="fa fa-list-ul"></i>
+                            Available datasets
+                        </h6>
+
+                        <ul class="list-group" style="max-height: 300px; overflow-y: auto;" *ngIf="files; else loading">
+                            <alert type="info" *ngIf="!files.length">
+                                <i class="fa fa-info-circle"></i>
+                                <span class="ml-2">No datasets found. </span>
+                                <a routerLink="/datasets">Add one now!</a>
+                            </alert>
+
+                            <app-dataset-item *ngFor="let dataset of files" draggable [dragData]="dataset"
+                                [dataset]="dataset" [selected]="selectedFile == dataset"
+                                (datasetSelected)="selectedFile = $event"></app-dataset-item>
+                        </ul>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="mb-3" *ngIf="!aggregation">
+                            <h6>Training Dataset</h6>
+                            <div class="drop-container" droppable (onDrop)="datasets.training = $event.dragData">
+                                <div class="drop-zone" *ngIf="!datasets.training">-- drop dataset here --</div>
+
+                                <div class="row mr-0" *ngIf="datasets.training">
+                                    <div class="col">
+                                        <app-dataset-item [dataset]="datasets.training"></app-dataset-item>
+                                    </div>
+                                    <button class="btn btn-sm bg-transparent border-none shadow-none"
+                                        (click)="datasets.training = null">
+                                        <i class="fa fa-close"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h6>Validation Dataset</h6>
+                            <div class="drop-container" droppable (onDrop)="datasets.validation = $event.dragData">
+                                <div class="drop-zone" *ngIf="!datasets.validation">-- drop dataset here --</div>
+
+                                <div class="row mr-0" *ngIf="datasets.validation">
+                                    <div class="col">
+                                        <app-dataset-item [dataset]="datasets.validation"></app-dataset-item>
+                                    </div>
+                                    <button class="btn btn-sm bg-transparent border-none shadow-none"
+                                        (click)="datasets.validation = null">
+                                        <i class="fa fa-close"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h6>Test Dataset</h6>
+                        <div class="drop-container" droppable (onDrop)="datasets.test = $event.dragData">
+                            <div class="drop-zone" *ngIf="!datasets.test">-- drop dataset here --</div>
+
+                            <div class="row mr-0" *ngIf="datasets.test">
+                                <div class="col">
+                                    <app-dataset-item [dataset]="datasets.test"></app-dataset-item>
+                                </div>
+                                <button class="btn btn-sm bg-transparent border-none shadow-none"
+                                    (click)="datasets.test = null">
+                                    <i class="fa fa-close"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-light border" type="button" (click)="taskActionModal.hide()">Cancel</button>
+                <button class="btn btn-success pull-right" (click)="start()">Start</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #taskResultModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left">Task Result</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="taskResultModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="imageUrl">
+                <span>Trained model generated the following prediction chart.</span>
+
+                <div class="text-center">
+                    <img [src]="imageUrl" width="90%">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light border" type="button" (click)="taskResultModal.hide()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left">Delete Task</h5>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="deleteModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="task">
+                <div class="mb-3">
+                    Are you sure to delete the task <b>"{{ task.task_name }}"</b>?
+                </div>
+
+                <alert type="warning">
+                    <i class="fa fa-exclamation-triangle mr-2"></i>
+                    <span>Remember, this operation cannot be undone.</span>
+                </alert>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light border" type="button" (click)="deleteModal.hide()">Cancel</button>
+                <button class="btn btn-danger pull-right" (click)="deleteTask(task)">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #loading>
+    <div class="row mx-0 py-3 justify-content-center">
+        <app-loader [size]="5"></app-loader>
+    </div>
+</ng-template>
