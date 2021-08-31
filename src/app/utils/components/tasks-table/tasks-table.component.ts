@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { faChartBar, faKey, faNetworkWired, faQuestion, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { Component, Input, OnInit } from '@angular/core';
+import { faKey } from '@fortawesome/free-solid-svg-icons';
 import { TaskSpecification } from 'src/model/taskDefinitions';
-import { User } from 'src/model/user';
 
 @Component({
   selector: 'app-tasks-table',

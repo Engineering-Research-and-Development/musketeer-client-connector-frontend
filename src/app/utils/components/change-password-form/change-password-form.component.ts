@@ -1,8 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastrService } from 'ngx-toastr';
-import { SettingsService } from 'src/app/settings/settings.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-change-password-form',
@@ -10,37 +6,24 @@ import { SettingsService } from 'src/app/settings/settings.service';
   styleUrls: ['./change-password-form.component.scss']
 })
 export class ChangePasswordFormComponent implements OnInit {
+  error: boolean;
   newPassword: string;
   confirmPassword: string;
 
-  constructor(
-    private settingsService: SettingsService,
-    private spinner: NgxSpinnerService,
-    private toaster: ToastrService,
-  ) { }
+  @Output() changePassword = new EventEmitter<string>();
+
+  constructor() { }
 
   ngOnInit() {
   }
 
-  changePassword() {
-    if(this.newPassword != this.confirmPassword) {
-      this.toaster.error('Provided password must be equal.')
+  onChangePwd() {
+    if (this.newPassword != this.confirmPassword) {
+      this.error = true;
       return;
     }
 
-    this.spinner.show();
-
-    this.settingsService.changePassword(this.newPassword)
-      .subscribe({
-        next: () => {
-          this.spinner.hide();
-          this.toaster.success('Password updated successfully!');
-        },
-        error: (err: HttpErrorResponse) => {
-          this.spinner.hide();
-          this.toaster.error(err.error.message || 'Could not update password.');
-        }
-      })
+    this.changePassword.emit(this.newPassword);
   }
 
 }

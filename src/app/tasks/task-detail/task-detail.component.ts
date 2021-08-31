@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, AfterViewInit, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faChartBar, faNetworkWired, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { TaskSpecification } from 'src/model/taskDefinitions';
@@ -57,6 +57,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     private spinner: NgxSpinnerService,
     private datasetsService: DatasetsService,
     private authService: AuthService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -161,7 +162,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       if (err['data']) {
         let error = JSON.parse(err['data']);
 
-        if(this.logs) {
+        if (this.logs) {
           this.logs += error.message;
         }
         else {
@@ -264,13 +265,19 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deleteTask(task: TaskSpecification) {
+    this.spinner.show();
+
     this.tasksService.deleteTask(task.task_name)
       .subscribe({
         next: (res: Task) => {
+          this.spinner.hide();
           this.deleteModal.hide();
-          this.refresh()
+          this.router.navigateByUrl('/tasks');
         },
-        error: () => this.toaster.error('Could not delete task.')
+        error: () => {
+          this.spinner.hide();
+          this.toaster.error('Could not delete task.');
+        }
       });
   }
 

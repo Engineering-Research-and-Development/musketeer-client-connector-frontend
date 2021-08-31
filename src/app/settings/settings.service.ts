@@ -15,4 +15,8 @@ export class SettingsService {
   changePassword(newPassword: string) {
     return this.http.patch<any>(`${this.globals.COMMS_URL}/change_password`, { new_password: newPassword });
   }
+
+  deregisterAccount() {
+    return this.http.delete<any>(`${this.globals.COMMS_URL}/deregister`);
+  }
 }

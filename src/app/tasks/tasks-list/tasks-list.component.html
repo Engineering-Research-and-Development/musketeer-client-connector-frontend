@@ -1,138 +1,139 @@
 <div>
-    <div id="top-tools">
-        <div class="row align-items-center mb-3">
-            <div class="col">
-                <h5 class="mb-0">Tasks List</h5>
-            </div>
+  <div id="top-tools">
+    <div class="row align-items-center mb-3">
+      <div class="col">
+        <h5 class="mb-0">Tasks List</h5>
+      </div>
 
-            <div class="col-4 text-right tools">
-                <button class="btn btn-light border mr-2" (click)="toggleSort()" tooltip="Sort by date">
-                    <i class="fa fa-sort-numeric-asc" *ngIf="sort == 'asc'"></i>
-                    <i class="fa fa-sort-numeric-desc" *ngIf="sort == 'desc'"></i>
-                </button>
+      <div class="col-4 text-right tools">
+        <button class="btn btn-light border mr-2" (click)="toggleSort()" tooltip="Sort by date">
+          <i class="fa fa-sort-numeric-asc" *ngIf="sort == 'asc'"></i>
+          <i class="fa fa-sort-numeric-desc" *ngIf="sort == 'desc'"></i>
+        </button>
 
-                <button class="btn btn-light border text-info mr-2" (click)="refresh()" tooltip="Refresh list">
-                    <i class="fa fa-refresh"></i>
-                </button>
+        <button class="btn btn-light border text-info mr-2" (click)="refresh()" tooltip="Refresh list">
+          <i class="fa fa-refresh"></i>
+        </button>
 
-                <button class="btn btn-success" routerLink="create">
-                    <i class="fa fa-plus"></i>
-                    Create task
-                </button>
-            </div>
-        </div>
+        <button class="btn btn-success" routerLink="create">
+          <i class="fa fa-plus"></i>
+          Create task
+        </button>
+      </div>
+    </div>
 
-        <div class="form-row mb-2">
-            <div class="col">
-                <div class="input-group">
-                    <div class="input-group-prepend">
+    <div class="form-row mb-2">
+      <div class="col">
+        <div class="input-group">
+          <div class="input-group-prepend">
                         <span class="input-group-text">
                             <i class="fa fa-search"></i>
                         </span>
-                    </div>
-                    <input class="form-control" type="text" [(ngModel)]="search" (ngModelChange)="updatePageTasks()"
-                        placeholder="Search task...">
-                </div>
-            </div>
-
-            <div class="col-2">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Status</span>
-                    </div>
-                    <select class="form-control" [(ngModel)]="status" (ngModelChange)="updatePageTasks()">
-                        <option>All</option>
-                        <option value="CREATED">Created</option>
-                        <option value="STARTED">Started</option>
-                        <option value="COMPLETE">Complete</option>
-                        <option value="FAILED">Failed</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-2">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Privacy</span>
-                    </div>
-                    <select class="form-control" [(ngModel)]="privacy" (ngModelChange)="updatePageTasks()">
-                        <option value="0">All</option>
-                        <option *ngFor="let level of privacyLevels" [value]="level.privacy">{{ level.label }}</option>
-                    </select>
-                </div>
-            </div>
+          </div>
+          <input class="form-control" type="text" [(ngModel)]="search" (ngModelChange)="updatePageTasks()"
+                 placeholder="Search task...">
         </div>
+      </div>
+
+      <div class="col-2">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Status</span>
+          </div>
+          <select class="form-control" [(ngModel)]="status" (ngModelChange)="updatePageTasks()">
+            <option>All</option>
+            <option value="CREATED">Created</option>
+            <option value="PENDING">Pending</option>
+            <option value="STARTED">Started</option>
+            <option value="COMPLETE">Complete</option>
+            <option value="FAILED">Failed</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-2">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Privacy</span>
+          </div>
+          <select class="form-control" [(ngModel)]="privacy" (ngModelChange)="updatePageTasks()">
+            <option value="0">All</option>
+            <option *ngFor="let level of privacyLevels" [value]="level.privacy">{{ level.label }}</option>
+          </select>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <app-custom-tabs>
-        <app-custom-tab label="All">
+  <app-custom-tabs>
+    <app-custom-tab label="All">
+      <app-custom-tab-pane>
+        <ng-container *ngIf="tasks; else loading">
+          <div class="row mb-3 align-items-center justify-content-center"
+               *ngIf="(tasks | filterBy:[search, 'task_name'] | filterBy:[privacy > 0 ? privacy : null, 'definition.POM'] | filterBy:[status != 'All' ? status : null, 'status']).length">
+            <div class="col-md-6">
+              <pagination
+                [totalItems]="(tasks | filterBy:[search, 'task_name'] | filterBy:[privacy > 0 ? privacy : null, 'definition.POM'] | filterBy:[status != 'All' ? status : null, 'status']).length"
+                [boundaryLinks]="true" [itemsPerPage]="tasksPerPage" [maxSize]="5"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+                [ngModel]="currentPage" (ngModelChange)="updatePageTasks($event)"></pagination>
+            </div>
+
+            <div class="col-md-3">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Items per page</span>
+                </div>
+                <select class="form-control" [(ngModel)]="tasksPerPage">
+                  <option>25</option>
+                  <option>50</option>
+                  <option>100</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <alert type="info" *ngIf="currentPageTasks.length == 0">
+            <i class="fa fa-info-circle mr-2"></i>
+            No tasks found!
+          </alert>
+
+          <ng-container *ngIf="currentPageTasks.length > 0">
+            <app-tasks-table [tasks]="currentPageTasks" [currentPage]="currentPage"
+                             [itemsPerPage]="tasksPerPage">
+            </app-tasks-table>
+          </ng-container>
+        </ng-container>
+      </app-custom-tab-pane>
+    </app-custom-tab>
+
+    <!-- <app-custom-tab label="Joined">
             <app-custom-tab-pane>
-                <ng-container *ngIf="tasks; else loading">
-                    <div class="row mb-3 align-items-center justify-content-center"
-                        *ngIf="(tasks | filterBy:[search, 'task_name'] | filterBy:[privacy > 0 ? privacy : null, 'definition.POM'] | filterBy:[status != 'All' ? status : null, 'status']).length">
-                        <div class="col-md-6">
-                            <pagination
-                                [totalItems]="(tasks | filterBy:[search, 'task_name'] | filterBy:[privacy > 0 ? privacy : null, 'definition.POM'] | filterBy:[status != 'All' ? status : null, 'status']).length"
-                                [boundaryLinks]="true" [itemsPerPage]="tasksPerPage" [maxSize]="5"
-                                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
-                                [ngModel]="currentPage" (ngModelChange)="updatePageTasks($event)"></pagination>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Items per page</span>
-                                </div>
-                                <select class="form-control" [(ngModel)]="tasksPerPage">
-                                    <option>25</option>
-                                    <option>50</option>
-                                    <option>100</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <alert type="info" *ngIf="currentPageTasks.length == 0">
-                        <i class="fa fa-info-circle mr-2"></i>
-                        No tasks found!
-                    </alert>
-
-                    <ng-container *ngIf="currentPageTasks.length > 0">
-                        <app-tasks-table [tasks]="currentPageTasks" [currentPage]="currentPage"
-                            [itemsPerPage]="tasksPerPage">
-                        </app-tasks-table>
-                    </ng-container>
-                </ng-container>
+                Lista dei task joinati.
             </app-custom-tab-pane>
-        </app-custom-tab>
+        </app-custom-tab> -->
 
-        <!-- <app-custom-tab label="Joined">
-                <app-custom-tab-pane>
-                    Lista dei task joinati.
-                </app-custom-tab-pane>
-            </app-custom-tab> -->
+    <app-custom-tab label="My Tasks">
+      <app-custom-tab-pane>
+        <ng-container *ngIf="tasks; else loading">
+          <alert type="info" *ngIf="currentPageTasks.length == 0">
+            <i class="fa fa-info-circle mr-2"></i>
+            No tasks found!
+          </alert>
 
-        <app-custom-tab label="My Tasks">
-            <app-custom-tab-pane>
-                <ng-container *ngIf="tasks; else loading">
-                    <alert type="info" *ngIf="currentPageTasks.length == 0">
-                        <i class="fa fa-info-circle mr-2"></i>
-                        No tasks found!
-                    </alert>
-
-                    <ng-container *ngIf="tasks.length > 0">
-                        <app-tasks-table [tasks]="createdTasks" [currentPage]="currentPage"
-                            [itemsPerPage]="tasksPerPage">
-                        </app-tasks-table>
-                    </ng-container>
-                </ng-container>
-            </app-custom-tab-pane>
-        </app-custom-tab>
-    </app-custom-tabs>
+          <ng-container *ngIf="tasks.length > 0">
+            <app-tasks-table [tasks]="createdTasks" [currentPage]="currentPage"
+                             [itemsPerPage]="tasksPerPage">
+            </app-tasks-table>
+          </ng-container>
+        </ng-container>
+      </app-custom-tab-pane>
+    </app-custom-tab>
+  </app-custom-tabs>
 </div>
 
 <ng-template #loading>
-    <div class="row mx-0 py-3 justify-content-center">
-        <app-loader [size]="5"></app-loader>
-    </div>
+  <div class="row mx-0 py-3 justify-content-center">
+    <app-loader [size]="5"></app-loader>
+  </div>
 </ng-template>
