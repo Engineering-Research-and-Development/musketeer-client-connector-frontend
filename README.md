@@ -1,9 +1,5 @@
 # NgxMusketeerClient
 
-This repository contain the front-end component of a web application to interact with a cloud target platform for federated machine learning. It is targeted to be used towards the MUSKETEER (https://musketeer.eu/) project. 
-
-The back-end component it is available at "https://github.com/Engineering-Research-and-Development/musketeer-client-connector-backend".
-
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.8.
 
 ## Starting the application
@@ -20,7 +16,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 -->
 
-## Docker prerequisites and installation
+## Prerequisites and installation
 
 In order to run the application through a Docker container, a Docker installation is required in the host.
 The Docker Daemon must be running to perform the following commands.
@@ -37,5 +33,3 @@ As a first step to create the Docker image build the project to create the 'dist
     
 Refer to the project on 'https://github.com/Engineering-Research-and-Development/musketeer-client-connector-backend' to run this frontend component that is coupled to the related backend component.
 Once it is done, the local server will be running at '127.0.0.1:5000', whilst you can use the User Interface by opening a browser and writing the following URL: '127.0.0.1:4500' (or 'localhost:4500'). 
-
-This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 824988. https://musketeer.eu/

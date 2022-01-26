@@ -1,13 +1,13 @@
 <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a routerLink="/tasks">
-        <i class="fa fa-home"></i>
-        <span class="ml-1">Home</span>
-      </a>
-    </li>
-    <li class="breadcrumb-item active" aria-current="page">Profile</li>
-  </ol>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a routerLink="/tasks">
+                <i class="fa fa-home"></i>
+                <span class="ml-1">Home</span>
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Profile</li>
+    </ol>
 </nav>
 
 <h5>Profile</h5>
@@ -17,35 +17,35 @@
 </div>
 
 <accordion [isAnimated]="true">
-  <accordion-group class="mb-2">
-    <div accordion-heading>
-      <fa-icon [icon]="faKey" [fixedWidth]="true" class="mr-2"></fa-icon>
-      <h6 class="d-inline-block mb-0">Change Password</h6>
-    </div>
+    <accordion-group class="mb-2">
+        <div accordion-heading>
+            <fa-icon [icon]="faKey" [fixedWidth]="true" class="mr-2"></fa-icon>
+            <h6 class="d-inline-block mb-0">Change Password</h6>
+        </div>
 
-    <app-change-password-form (changePassword)="changePassword($event)"></app-change-password-form>
-  </accordion-group>
+        <app-change-password-form (changePassword)="changePassword($event)"></app-change-password-form>
+    </accordion-group>
 
-  <accordion-group>
-    <div accordion-heading>
-      <fa-icon [icon]="faUserTimes" [fixedWidth]="true" class="mr-2"></fa-icon>
-      <h6 class="d-inline-block mb-0">Delete account</h6>
-    </div>
+    <accordion-group>
+        <div accordion-heading>
+            <fa-icon [icon]="faUserTimes" [fixedWidth]="true" class="mr-2"></fa-icon>
+            <h6 class="d-inline-block mb-0">Delete account</h6>
+        </div>
 
-    <p class="text-muted">
-      By pressing the following button you will remove the account from the Musketeer servers.
-    </p>
+        <p class="text-muted">
+            By pressing the following button you will remove the account from the Musketeer servers.
+        </p>
 
-    <alert type="warning">
-      <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-      <span class="ml-2">Beware! This operation cannot be undone. You will lose your credentials and won't be able
+        <alert type="warning">
+            <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+            <span class="ml-2">Beware! This operation cannot be undone. You will lose your credentials and won't be able
                 to log in Musketeer platform anymore.</span>
-    </alert>
+        </alert>
 
-    <br>
+        <br>
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-danger" (click)="deregisterAccount()">Deregister</button>
-    </div>
-  </accordion-group>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-danger" (click)="deregisterAccount()">Deregister</button>
+        </div>
+    </accordion-group>
 </accordion>

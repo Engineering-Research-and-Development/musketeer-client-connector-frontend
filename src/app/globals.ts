@@ -31,4 +31,6 @@ export class Globals {
   
   readonly FML_URL = `${this.BASE_URL}/fml`;
 
+  readonly STATUS_INTERVAL = 10000; // 10s interval
+
 }

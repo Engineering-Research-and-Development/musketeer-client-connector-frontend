@@ -6,6 +6,7 @@ import { Globals } from '../globals';
   providedIn: 'root'
 })
 export class SettingsService {
+  connectionIsUp: boolean;
 
   constructor(
     private globals: Globals,
@@ -18,5 +19,9 @@ export class SettingsService {
 
   deregisterAccount() {
     return this.http.delete<any>(`${this.globals.COMMS_URL}/deregister`);
+  }
+
+  getConnectionStatus() {
+    return this.http.get<any>(`${this.globals.COMMS_URL}/status`);
   }
 }
